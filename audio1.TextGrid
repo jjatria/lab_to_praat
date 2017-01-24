@@ -1,0 +1,178 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 3.1498125 
+tiers? <exists> 
+size = 1 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "phone" 
+        xmin = 0 
+        xmax = 3.1498125 
+        intervals: size = 41 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.020625 
+            text = "" 
+        intervals [2]:
+            xmin = 0.020625 
+            xmax = 0.176125 
+            text = "#p" 
+        intervals [3]:
+            xmin = 0.176125 
+            xmax = 0.251625 
+            text = "nn" 
+        intervals [4]:
+            xmin = 0.251625 
+            xmax = 0.3210625 
+            text = "an" 
+        intervals [5]:
+            xmin = 0.3210625 
+            xmax = 0.4150624 
+            text = "wn" 
+        intervals [6]:
+            xmin = 0.4150624 
+            xmax = 0.4726875 
+            text = "pp" 
+        intervals [7]:
+            xmin = 0.4726875 
+            xmax = 0.5451474174893679 
+            text = "oh" 
+        intervals [8]:
+            xmin = 0.5451474174893679 
+            xmax = 0.6826875 
+            text = "dz" 
+        intervals [9]:
+            xmin = 0.6826875 
+            xmax = 0.7104375 
+            text = "ic" 
+        intervals [10]:
+            xmin = 0.7104375 
+            xmax = 0.740125 
+            text = "aa" 
+        intervals [11]:
+            xmin = 0.740125 
+            xmax = 0.792875 
+            text = "vv" 
+        intervals [12]:
+            xmin = 0.792875 
+            xmax = 0.8865625 
+            text = "ee" 
+        intervals [13]:
+            xmin = 0.8865625 
+            xmax = 0.922875 
+            text = "rf" 
+        intervals [14]:
+            xmin = 0.922875 
+            xmax = 1.017375 
+            text = "tt" 
+        intervals [15]:
+            xmin = 1.017375 
+            xmax = 1.0648125 
+            text = "rd" 
+        intervals [16]:
+            xmin = 1.0648125 
+            xmax = 1.2147501 
+            text = "eh" 
+        intervals [17]:
+            xmin = 1.2147501 
+            xmax = 1.2839375 
+            text = "gg" 
+        intervals [18]:
+            xmin = 1.2839375 
+            xmax = 1.3133125 
+            text = "uw" 
+        intervals [19]:
+            xmin = 1.3133125 
+            xmax = 1.387125 
+            text = "ac" 
+        intervals [20]:
+            xmin = 1.387125 
+            xmax = 1.4529375 
+            text = "zz" 
+        intervals [21]:
+            xmin = 1.4529375 
+            xmax = 1.5194376 
+            text = "nn" 
+        intervals [22]:
+            xmin = 1.5194376 
+            xmax = 1.6180625 
+            text = "ac" 
+        intervals [23]:
+            xmin = 1.6180625 
+            xmax = 1.6940624 
+            text = "gg" 
+        intervals [24]:
+            xmin = 1.6940624 
+            xmax = 1.8078124 
+            text = "eh" 
+        intervals [25]:
+            xmin = 1.8078124 
+            xmax = 1.9224376 
+            text = "rx" 
+        intervals [26]:
+            xmin = 1.9224376 
+            xmax = 1.9870624 
+            text = "ac" 
+        intervals [27]:
+            xmin = 1.9870624 
+            xmax = 2.1035626 
+            text = "kk" 
+        intervals [28]:
+            xmin = 2.1035626 
+            xmax = 2.247 
+            text = "on" 
+        intervals [29]:
+            xmin = 2.247 
+            xmax = 2.310625 
+            text = "tt" 
+        intervals [30]:
+            xmin = 2.310625 
+            xmax = 2.348375 
+            text = "rd" 
+        intervals [31]:
+            xmin = 2.348375 
+            xmax = 2.3690624 
+            text = "ac" 
+        intervals [32]:
+            xmin = 2.3690624 
+            xmax = 2.395375 
+            text = "ac" 
+        intervals [33]:
+            xmin = 2.395375 
+            xmax = 2.44625 
+            text = "mm" 
+        intervals [34]:
+            xmin = 2.44625 
+            xmax = 2.5359376 
+            text = "aa" 
+        intervals [35]:
+            xmin = 2.5359376 
+            xmax = 2.5976874 
+            text = "ll" 
+        intervals [36]:
+            xmin = 2.5976874 
+            xmax = 2.7414374 
+            text = "aa" 
+        intervals [37]:
+            xmin = 2.7414374 
+            xmax = 2.797875 
+            text = "rr" 
+        intervals [38]:
+            xmin = 2.797875 
+            xmax = 2.8521874 
+            text = "ij" 
+        intervals [39]:
+            xmin = 2.8521874 
+            xmax = 2.94275 
+            text = "ac" 
+        intervals [40]:
+            xmin = 2.94275 
+            xmax = 3.10775 
+            text = "#p" 
+        intervals [41]:
+            xmin = 3.10775 
+            xmax = 3.1498125 
+            text = "" 
