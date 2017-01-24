@@ -64,10 +64,8 @@ for stringNumber from 3 to numberOfStrings
     Set interval text: 1, interval, phone$
 endfor
 
-removeObject: stringID 
-selectObject: soundID
-plusObject: tgID
-View & Edit
+removeObject: stringID
+selectObject: soundID, tgID
 
 #string replace to format time in seconds
 procedure replace: .string$
