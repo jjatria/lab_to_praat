@@ -25,43 +25,46 @@ tgID = To TextGrid: "phone", ""
 stringID = Read Strings from raw text file: lab_file_dir$
 numberOfStrings = Get number of strings
 
-for stringNumber from 3 to numberOfStrings
+for stringNumber to numberOfStrings
     selectObject: stringID
     line$ = Get string: stringNumber
-    stringID_parsed = Create Strings as tokens: line$
-    nStrings_parsed = Get number of strings
 
-    #Get info from each column
-    time_start$ = Get string: 1
-    time_end$ = Get string: 2
-    phone$ = Get string: 3
+    if !index_regex(line$, "^\s*//")
+        stringID_parsed = Create Strings as tokens: line$
+        nStrings_parsed = Get number of strings
 
-    @replace: time_start$
-    time_start  = number(replace.string$)
+        #Get info from each column
+        time_start$ = Get string: 1
+        time_end$ = Get string: 2
+        phone$ = Get string: 3
 
-    @replace: time_end$
-    time_end  = number(replace.string$)
+        @replace: time_start$
+        time_start  = number(replace.string$)
 
-    time_mid = ((time_end-time_start)/2)+time_start
+        @replace: time_end$
+        time_end  = number(replace.string$)
 
-    left = index(phone$, "-")
-    left += 1
-    right = index(phone$, "+")
-    right = right - left
-    phone$ = mid$  (phone$, left, right)
+        time_mid = ((time_end-time_start)/2)+time_start
 
-    removeObject: stringID_parsed
+        left = index(phone$, "-")
+        left += 1
+        right = index(phone$, "+")
+        right = right - left
+        phone$ = mid$  (phone$, left, right)
 
-    #4. write information in TextGrid format.
-    tmin = 0 ;
-    tmax = 1;
+        removeObject: stringID_parsed
 
-    selectObject: tgID
- #Insert boundaries
-    nocheck Insert boundary: 1, time_start
-    nocheck Insert boundary: 1, time_end
-    interval = Get interval at time: 1, time_mid
-    Set interval text: 1, interval, phone$
+        #4. write information in TextGrid format.
+        tmin = 0 ;
+        tmax = 1;
+
+        selectObject: tgID
+    #Insert boundaries
+        nocheck Insert boundary: 1, time_start
+        nocheck Insert boundary: 1, time_end
+        interval = Get interval at time: 1, time_mid
+        Set interval text: 1, interval, phone$
+    endif
 endfor
 
 removeObject: stringID 
