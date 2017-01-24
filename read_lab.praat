@@ -37,10 +37,10 @@ for stringNumber from 3 to numberOfStrings
     phone$ = Get string: 3
 
     @replace: time_start$
-    time_start  = number(replace.string$)
+    time_start  = replace.number
 
     @replace: time_end$
-    time_end  = number(replace.string$)
+    time_end  = replace.number
 
     time_mid = ((time_end-time_start)/2)+time_start
 
@@ -71,9 +71,5 @@ View & Edit
 
 #string replace to format time in seconds
 procedure replace: .string$
-    .string$ = replace_regex$ (.string$, "([0-9]{7})$", ".\1", 0)
-    .string$ = replace_regex$ (.string$, "0([1-9])\.", "\1.", 0)
-    .string$ = replace_regex$ (.string$, "0+\.", "0.", 0) 
-    .string$ = replace_regex$ (.string$, "0+$", "", 0)
+    .number = number(.string$) / 1e7
 endproc
-
