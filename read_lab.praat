@@ -25,55 +25,34 @@ tgID = To TextGrid: "phone", ""
 stringID = Read Strings from raw text file: lab_file_dir$
 numberOfStrings = Get number of strings
 
-for stringNumber from 3 to numberOfStrings
+for stringNumber to numberOfStrings
     selectObject: stringID
     line$ = Get string: stringNumber
-    stringID_parsed = Create Strings as tokens: line$
-    nStrings_parsed = Get number of strings
 
-    #Get info from each column
-    time_start$ = Get string: 1
-    time_end$ = Get string: 2
-    phone$ = Get string: 3
+    if !index_regex(line$, "^\s*//")
+        @replace: extractNumber(line$, "")
+        time_start = replace.number
 
-    @replace: time_start$
-    time_start  = number(replace.string$)
+        @replace: extractNumber(line$, " ")
+        time_end   = replace.number
 
-    @replace: time_end$
-    time_end  = number(replace.string$)
+        label$     = replace_regex$(line$, ".*\s(.*)$", "\1", 1)
 
-    time_mid = ((time_end-time_start)/2)+time_start
-
-    left = index(phone$, "-")
-    left += 1
-    right = index(phone$, "+")
-    right = right - left
-    phone$ = mid$  (phone$, left, right)
-
-    removeObject: stringID_parsed
-
-    #4. write information in TextGrid format.
-    tmin = 0 ;
-    tmax = 1;
-
-    selectObject: tgID
- #Insert boundaries
-    nocheck Insert boundary: 1, time_start
-    nocheck Insert boundary: 1, time_end
-    interval = Get interval at time: 1, time_mid
-    Set interval text: 1, interval, phone$
+        selectObject: tgID
+        #Insert boundaries
+        nocheck Insert boundary: 1, time_start
+        nocheck Insert boundary: 1, time_end
+        interval = Get low interval at time: 1, time_end
+        Set interval text: 1, interval, label$
+    endif
 endfor
 
-removeObject: stringID 
-selectObject: soundID
-plusObject: tgID
-View & Edit
+Replace interval text: 1, 0, 0, "^.*?-([^+]*?)\+.*", "\1", "Regular Expressions"
+
+removeObject: stringID
+selectObject: soundID, tgID
 
 #string replace to format time in seconds
-procedure replace: .string$
-    .string$ = replace_regex$ (.string$, "([0-9]{7})$", ".\1", 0)
-    .string$ = replace_regex$ (.string$, "0([1-9])\.", "\1.", 0)
-    .string$ = replace_regex$ (.string$, "0+\.", "0.", 0) 
-    .string$ = replace_regex$ (.string$, "0+$", "", 0)
+procedure replace: .number
+    .number /= 1e7
 endproc
-
