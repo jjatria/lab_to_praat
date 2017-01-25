@@ -52,12 +52,8 @@ for stringNumber from 3 to numberOfStrings
 endfor
 
 removeObject: stringID
-<<<<<<< HEAD
 selectObject: tgID
 Replace interval text: 1, 0, 0, "^.*?-([^+]*?)\+.*", "\1", "Regular Expressions"
-=======
-selectObject: soundID, tgID
->>>>>>> 831c8503219eb043766b7891d6d8dc10a9d22208
 
 #string replace to format time in seconds
 procedure replace: .number
