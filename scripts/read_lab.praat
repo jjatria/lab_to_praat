@@ -8,6 +8,8 @@
 ###############################################################
 ###############################################################
 
+include ../procedures/timestamps.proc
+
 #Allow Input
 form Info
     sentence Lab_file_dir /home/user_name/1.lab
@@ -30,13 +32,13 @@ for stringNumber to numberOfStrings
     line$ = Get string: stringNumber
 
     if !index_regex(line$, "^\s*//")
-        @replace: extractNumber(line$, "")
-        time_start = replace.number
+        @mlf_time_to_seconds: extractNumber(line$, "")
+        time_start = mlf_time_to_seconds.return
 
-        @replace: extractNumber(line$, " ")
-        time_end   = replace.number
+        @mlf_time_to_seconds: extractNumber(line$, " ")
+        time_end = mlf_time_to_seconds.return
 
-        label$     = replace_regex$(line$, ".*\s(.*)$", "\1", 1)
+        label$ = replace_regex$(line$, ".*\s(.*)$", "\1", 1)
 
         selectObject: tgID
         #Insert boundaries
@@ -51,8 +53,3 @@ Replace interval text: 1, 0, 0, "^.*?-([^+]*?)\+.*", "\1", "Regular Expressions"
 
 removeObject: stringID
 selectObject: soundID, tgID
-
-#string replace to format time in seconds
-procedure replace: .number
-    .number /= 1e7
-endproc
