@@ -12,19 +12,19 @@ include ../procedures/timestamps.proc
 
 #Allow Input
 form Info
-    sentence Lab_file_dir /home/user_name/1.lab
-    sentence Sound_dir  /home/user_name/audio1.wav
+    sentence Lab_file /home/user_name/1.lab
+    sentence Sound  /home/user_name/audio1.wav
 endform
 
 clearinfo
 
 #Open wav file
-soundID = Read from file: sound_dir$
+soundID = Read from file: sound$
 tgID = To TextGrid: "phone", ""
 
 #read the .lab file into praat
 
-stringID = Read Strings from raw text file: lab_file_dir$
+stringID = Read Strings from raw text file: lab_file$
 numberOfStrings = Get number of strings
 
 for stringNumber to numberOfStrings
