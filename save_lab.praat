@@ -1,11 +1,17 @@
+#Allow Input
 form Info
-    sentence New_lab_file_dir /home/badner/Downloads/1_revised.lab
+    sentence New_lab_file_dir /home/cshulby/lab_to_praat/1_revised.lab
 endform
 
+clearinfo
 
 #1. read strings from TextGrid object already open in the gui into the info window
+outputFile$ = new_lab_file_dir$
 
-tG$ = selectObject: selected$("TextGrid") 
+selectObject: 2
+writeFile: outputFile$, ""                        ; start from an empty .txt
+
+#2. parse by item in the phone tier to get the start_time$ and end_time$
 
 numberOfIntervals = Get number of intervals: 1    ; (this is tier 1)
 
@@ -14,15 +20,24 @@ for interval to numberOfIntervals
     if label$ != ""                               ; (we just want non-empty intervals)
         xmin = Get start time of interval: 1, interval
         xmax = Get end time of interval: 1, interval
-        appendFileLine: outputFile$, "'label$''tab$''xmin''tab$''xmax'"
-    endif
-endfor
-
-#2. parse by item in the phone tier to get the start_time$ and end_time$
-    #this will not be difficult once the TextGrid info is here
 
 #3. convert the times back to e-07 format with leading zeros.
-    #Make some replaces here
+        xmin$ = string$(xmin)
+        @replace: xmin$
+        xmin  = number(replace.string$)
+        xmin$=string$(xmin)
+        #for some reason these replaces don't work inside the procedure... any ideas why?
+        xmin$ = replace_regex$ (xmin$, "^", "000000000", 1)
+        xmin$ = replace_regex$ (xmin$, "[0-9]*([0-9]{9})$", "\1", 0)
+       # appendInfoLine: xmin$
+
+        xmax$ = string$(xmax)
+        @replace: xmax$
+        xmax  = number(replace.string$)
+        xmax$=string$(xmax)
+        xmax$ = replace_regex$ (xmax$, "^", "000000000", 1)
+        xmax$ = replace_regex$ (xmax$, "[0-9]*([0-9]{9})$", "\1", 0)
+      #  appendInfoLine: xmax$
 
 #4. import the strings from the original lab file like we did in read lab.
     #this can be copied from the read_lab scripts newest version
@@ -34,4 +49,19 @@ endfor
     #what is the most elegant way to do this?
 
 #7. write to a new lab file.
-    #using the name defined in the window
+#using the name defined in the window
+
+        appendFileLine: outputFile$, "'xmin$'" + " " + "'xmax$'"
+    endif
+endfor
+
+
+#string replace to format time in seconds
+procedure replace: .string$
+        .string$ = replace_regex$ (.string$, "(\.[0-9]*[1-9])", "\10000000", 0)
+        .string$ = replace_regex$ (.string$, "([0-9]{7})0*$", "\1", 0)
+        .string$ = replace_regex$ (.string$, "\.", "", 0)
+        #for some reason the "^" isn't working here so I will copy it above.  Ugly but it will work
+        #.string$ = replace_regex$ (.string$, "^", "000000000", 0)
+        #.string$ = replace_regex$ (.string$, "[0-9]*([0-9]{9})$", "\1", 0)
+endproc
