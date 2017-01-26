@@ -11,8 +11,7 @@
 include ../procedures/timestamps.proc
 include ../../plugin_utils/procedures/check_filename.proc
 
-#Allow Input
-form Info
+form Read HTK label file...
     sentence Lab_file
     sentence Sound
     comment  Leave paths empty for GUI selectors
