@@ -2,12 +2,12 @@ include ../../plugin_tap/procedures/more.proc
 
 @no_plan()
 
-reference_sound = Read from file: "audio1.wav"
+reference_sound = Read from file: "sample.wav"
 reference_duration = Get total duration
 
 reference_textgrid = Read from file: "no_context.TextGrid"
 
-runScript: "../scripts/read_lab.praat", "../t/1.lab", "", 0, 1
+runScript: "../scripts/read_lab.praat", "../t/sample.lab", "", 0, 1
 @is_true:  numberOfSelected("TextGrid"), "Script generates TextGrid without Sound"
 @is_false: numberOfSelected("Sound"),    "Script does not read Sound"
 
@@ -24,7 +24,7 @@ for i to hypotheses
     removeObject: hyp[i]
 endfor
 
-runScript: "../scripts/read_lab.praat", "../t/1.lab", "../t/audio1.wav", 1, 1
+runScript: "../scripts/read_lab.praat", "../t/sample.lab", "../t/sample.wav", 1, 1
 @is_true: numberOfSelected("TextGrid"), "Script generates TextGrid with Sound"
 @is_true: numberOfSelected("Sound"),    "Script reads Sound"
 
