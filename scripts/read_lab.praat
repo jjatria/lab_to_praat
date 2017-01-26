@@ -9,14 +9,20 @@
 ###############################################################
 
 include ../procedures/timestamps.proc
+include ../../plugin_utils/procedures/check_filename.proc
 
 #Allow Input
 form Info
-    sentence Lab_file /home/user_name/1.lab
-    sentence Sound  /home/user_name/audio1.wav
+    sentence Lab_file
+    sentence Sound
+    comment  Leave paths empty for GUI selectors
 endform
 
-clearinfo
+@checkFilename: lab_file$, "Select HTK label file..."
+lab_file$ = checkFilename.name$
+
+@checkFilename: sound$, "Select sound file..."
+sound$ = checkFilename.name$
 
 #Open wav file
 soundID = Read from file: sound$
