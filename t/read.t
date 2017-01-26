@@ -7,33 +7,46 @@ test_duration = Get total duration
 
 test_textgrid = Read from file: "test.TextGrid"
 
-# runScript: "../read_lab.praat", "../t/1.lab", ""
-# @is_true:  numberOfSelected("TextGrid"), "Script generates TextGrid without Sound"
-# @is_false: numberOfSelected("Sound"),    "Script does not read Sound"
-#
-# textgrid = selected("TextGrid")
-# selectObject: textgrid, test_textgrid
-# @test_intervals()
-#
-# removeObject: selected("TextGrid")
+runScript: "../scripts/read_lab.praat", "../t/1.lab", "", 0
+@is_true:  numberOfSelected("TextGrid"), "Script generates TextGrid without Sound"
+@is_false: numberOfSelected("Sound"),    "Script does not read Sound"
 
-runScript: "../scripts/read_lab.praat", "../t/1.lab", "../t/audio1.wav"
+hypotheses = numberOfSelected("TextGrid")
+for i to hypotheses
+    hyp[i] = selected("TextGrid", i)
+endfor
+for i to hypotheses
+    textgrid = hyp[i]
+    selectObject: test_textgrid, textgrid
+    @test_intervals()
+endfor
+for i to hypotheses
+    removeObject: hyp[i]
+endfor
+
+runScript: "../scripts/read_lab.praat", "../t/1.lab", "../t/audio1.wav", 1
 @is_true: numberOfSelected("TextGrid"), "Script generates TextGrid with Sound"
 @is_true: numberOfSelected("Sound"),    "Script reads Sound"
 
-textgrid = selected("TextGrid")
-sound    = selected("Sound")
+sound = selected("Sound")
+hypotheses = numberOfSelected("TextGrid")
+for i to hypotheses
+    hyp[i] = selected("TextGrid", i)
+endfor
+for i to hypotheses
+    textgrid = hyp[i]
 
-selectObject: textgrid
-textgrid_duration = Get total duration
+    selectObject: textgrid
+    textgrid_duration = Get total duration
 
-@is: test_duration, textgrid_duration, "TextGrid from Sound has same duration"
+    @is: test_duration, textgrid_duration, "TextGrid from Sound has same duration"
 
-selectObject: test_textgrid, textgrid
-pause
-@test_intervals()
-
-removeObject: textgrid
+    selectObject: test_textgrid, textgrid
+    @test_intervals()
+endfor
+for i to hypotheses
+    removeObject: hyp[i]
+endfor
 removeObject: sound
 
 procedure test_intervals ()
