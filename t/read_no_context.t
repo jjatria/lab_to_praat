@@ -2,12 +2,12 @@ include ../../plugin_tap/procedures/more.proc
 
 @no_plan()
 
-test_sound = Read from file: "audio1.wav"
-test_duration = Get total duration
+reference_sound = Read from file: "audio1.wav"
+reference_duration = Get total duration
 
-test_textgrid = Read from file: "test.TextGrid"
+reference_textgrid = Read from file: "no_context.TextGrid"
 
-runScript: "../scripts/read_lab.praat", "../t/1.lab", "", 0
+runScript: "../scripts/read_lab.praat", "../t/1.lab", "", 0, 1
 @is_true:  numberOfSelected("TextGrid"), "Script generates TextGrid without Sound"
 @is_false: numberOfSelected("Sound"),    "Script does not read Sound"
 
@@ -17,14 +17,14 @@ for i to hypotheses
 endfor
 for i to hypotheses
     textgrid = hyp[i]
-    selectObject: test_textgrid, textgrid
+    selectObject: reference_textgrid, textgrid
     @test_intervals()
 endfor
 for i to hypotheses
     removeObject: hyp[i]
 endfor
 
-runScript: "../scripts/read_lab.praat", "../t/1.lab", "../t/audio1.wav", 1
+runScript: "../scripts/read_lab.praat", "../t/1.lab", "../t/audio1.wav", 1, 1
 @is_true: numberOfSelected("TextGrid"), "Script generates TextGrid with Sound"
 @is_true: numberOfSelected("Sound"),    "Script reads Sound"
 
@@ -39,9 +39,9 @@ for i to hypotheses
     selectObject: textgrid
     textgrid_duration = Get total duration
 
-    @is: test_duration, textgrid_duration, "TextGrid from Sound has same duration"
+    @is: reference_duration, textgrid_duration, "TextGrid from Sound has same duration"
 
-    selectObject: test_textgrid, textgrid
+    selectObject: reference_textgrid, textgrid
     @test_intervals()
 endfor
 for i to hypotheses
@@ -94,7 +94,7 @@ procedure test_intervals ()
     endif
 endproc
 
-removeObject: test_sound, test_textgrid
+removeObject: reference_sound, reference_textgrid
 
 @ok_selection()
 

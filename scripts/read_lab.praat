@@ -16,6 +16,7 @@ form Read HTK label file...
     sentence Path_to_audio_(optional)
     comment  Leave paths empty for GUI selectors
     boolean  Use_sound_file no
+    boolean  Discard_context no
 endform
 
 @checkFilename: path_to_label$, "Select HTK label file..."
@@ -33,7 +34,8 @@ endif
 @read_lab()
 removeObject: strings
 
-nocheck minusObject: sound
-Replace interval text: 1, 0, 0, "^.*?-([^+]*?)\+.*", "\1", "Regular Expressions"
-nocheck plusObject: sound
-
+if discard_context
+    nocheck minusObject: sound
+    Replace interval text: 1, 0, 0, "^.*?-([^+]*?)\+.*", "\1", "Regular Expressions"
+    nocheck plusObject: sound
+endif
