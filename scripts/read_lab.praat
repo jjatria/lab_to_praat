@@ -12,26 +12,28 @@ include ../procedures/read.proc
 include ../../plugin_utils/procedures/check_filename.proc
 
 form Read HTK label file...
-    sentence Lab_file
-    sentence Sound
+    sentence Path_to_label
+    sentence Path_to_audio_(optional)
     comment  Leave paths empty for GUI selectors
+    boolean  Use_sound_file no
 endform
 
-@checkFilename: lab_file$, "Select HTK label file..."
-lab_file$ = checkFilename.name$
+@checkFilename: path_to_label$, "Select HTK label file..."
+path_to_label$ = checkFilename.name$
+strings = Read Strings from raw text file: path_to_label$
 
-@checkFilename: sound$, "Select sound file..."
-sound$ = checkFilename.name$
+if use_sound_file
+    @checkFilename: path_to_audio$, "Select sound file..."
+    path_to_audio$ = checkFilename.name$
+    sound = Read from file: path_to_audio$
 
-#Open wav file
-soundID = Read from file: sound$
-stringID = Read Strings from raw text file: lab_file$
+    plusObject: strings
+endif
 
-selectObject: soundID, stringID
 @read_lab()
-removeObject: stringID
+removeObject: strings
 
-minusObject: soundID
+nocheck minusObject: sound
 Replace interval text: 1, 0, 0, "^.*?-([^+]*?)\+.*", "\1", "Regular Expressions"
-plusObject: soundID
+nocheck plusObject: sound
 
