@@ -1,0 +1,119 @@
+include ../../plugin_htklabel/procedures/timestamps.proc
+
+procedure read_lab ()
+    .strings = selected("Strings")
+    .sound = numberOfSelected("Sound")
+
+    .hypotheses = 1
+    .textgrid = undefined
+
+    if .sound
+        .sound = selected("Sound")
+    endif
+
+    selectObject: .strings
+    .total_strings = Get number of strings
+
+    for .i to .total_strings
+        selectObject: .strings
+        .line$ = Get string: .i
+
+        if index_regex(.line$, "^\s*///")
+            .hypotheses += 1
+            .textgrid = undefined
+        elsif index_regex(.line$, "^\s*//")
+            # C-style comment. Are these valid?
+        else
+            @parse_lab_line: .line$
+            .start = parse_lab_line.start
+            .end   = parse_lab_line.end
+
+            if .start == undefined or .end == undefined
+                for .j to .hypotheses
+                    nocheck removeObject: .hyp[.j]
+                endfor
+                .hypotheses = 0
+                exitScript: "Cannot parse line #", .i, ":", newline$,
+                    ... tab$, .line$, newline$,
+                    ... "Start and end times are required", newline$
+            endif
+
+            if .textgrid == undefined
+                if .sound
+                    selectObject: .sound
+                    .textgrid = To TextGrid: "token", ""
+                else
+                    .textgrid = Create TextGrid: .start, .end, "token", ""
+                endif
+                Rename: "HTK Labels"
+            else
+                selectObject: .textgrid
+                .old_end = Get end time
+
+                if .end > .old_end
+                    nocheck Extend time: .end - .old_end, "End"
+
+                    .tiers = Get number of tiers
+                    for .j to .tiers
+                        nocheck Remove boundary at time: .j, .old_end
+                    endfor
+                endif
+            endif
+
+            .hyp[.hypotheses] = .textgrid
+
+            for .t to parse_lab_line.levels
+                .tiers = Get number of tiers
+
+                if .t > .tiers
+                    Insert interval tier: 1, "level" + string$(.i)
+                endif
+
+                .tiers = Get number of tiers
+                .tier  = .tiers - .t + 1
+                .name$ = parse_lab_line.name$[.t]
+
+                nocheck Insert boundary: .tier, .start
+                if .t == 1
+                  nocheck Insert boundary: .tier, .end
+                endif
+
+                .interval = Get high interval at time: .tier, .start
+                Set interval text: .tier, .interval, .name$
+            endfor
+        else
+        endif
+    endfor
+
+    nocheck selectObject: undefined
+    for .i to .hypotheses
+        plusObject: .hyp[.i]
+    endfor
+    if .sound
+        plusObject: .sound
+    endif
+endproc
+
+procedure parse_lab_line: .line$
+    .times$ = replace_regex$(.line$, "^\s*([0-9]+)\s+([0-9]+).*", "\1:\2", 1)
+    .names$ = replace_regex$(.line$, "^\s*[0-9]+\s+[0-9]+\s+", "", 1)
+
+    @mlf_time_to_seconds: number(replace_regex$(.times$, ":.*", "", 0))
+    .start = mlf_time_to_seconds.return
+    @mlf_time_to_seconds: number(replace_regex$(.times$, ".*:", "", 0))
+    .end = mlf_time_to_seconds.return
+
+    .i = 0
+    repeat
+      .i += 1
+
+      .tokens$ = replace_regex$(.names$, "^(\S+)(\s+[-+]?[0-9](\.[0-9]+)?(e[0-9]+)?)?", "\1'newline$'\2", 1)
+      .names$  = replace_regex$(.names$, "^(\S+)(\s+[-+]?[0-9](\.[0-9]+)?(e[0-9]+)?)?\s*", "", 1)
+
+      .name$[.i] =        replace_regex$(.tokens$,   "\n.*", "", 1)
+      .name$[.i] =        replace_regex$(.name$[.i], "^\s+", "", 1)
+      .score[.i] = number(replace_regex$(.tokens$,   ".*\n", "", 1))
+    until .names$ == "" or .i > 100
+    .levels = .i
+endproc
+
