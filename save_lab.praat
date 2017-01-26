@@ -8,6 +8,7 @@ clearinfo
 
 #1. read strings from TextGrid object already open in the gui into the info window
 outputFile$ = new_lab_file_dir$
+tmpFile$ = "./tmp.txt"
 
 selectObject: 2
 writeFile: outputFile$, ""                        ; start from an empty .txt
@@ -41,7 +42,7 @@ for interval to numberOfIntervals
       #  appendInfoLine: xmax$
 
 
-        appendFileLine: outputFile$, "'xmin$'" + " " + "'xmax$'"
+        appendFileLine: tmpFile$, "'xmin$'" + " " + "'xmax$'"
     endif
 endfor
 #4. import the strings from the original lab file like we did in read lab.
@@ -53,7 +54,7 @@ numberOfStrings = Get number of strings
 for stringNumber from 1 to 2
     selectObject: stringID
     line$ = Get string: stringNumber
-    appendInfoLine:line$
+    appendFileLine: outputFile$, line$
 endfor
 
 for stringNumber from 1 to numberOfStrings
@@ -65,11 +66,14 @@ for stringNumber from 1 to numberOfStrings
 #5. parse to get the labels (the part with the pentaphones and the features -->ex. "uw^ac-zz+nn=ac/P1:+4/P2:+6/P3:+0" ) #remember the number of phones must be static.  The user should not add or delete a boundary because if the phonetic transcription is not correct, this should be corrected before it gets to the lab file, otherwise the training process in HTS or HTK will fail anyway.
 
     #Get info from each column
-    where = startsWith (line$, "0")
+    #This is really ugly but it works, is there a more elegant way to do this?
+    where = startsWith (line$, "0") or startsWith (line$, "1")
     if where == 1
         phone$ = Get string: 3
         #URGENT: This produces the right format but not the correct time stamps, just the last.  Need a solution for this
-        appendInfoLine:xmin$ + " " + xmax$ + " " + phone$
+        a = Read Strings from raw text file: tmpFile$
+        line$ = Get string: stringNumber-2
+        appendFileLine: outputFile$, "'line$'" + " " + "'phone$'"
     endif
 endfor
 
