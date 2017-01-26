@@ -5,13 +5,18 @@ endform
 
 #1. read strings from TextGrid object already open in the gui into the info window
 
-tG$ = selectObject: selected$("TextGrid")
-stringID = Read Strings from tG
+tG$ = selectObject: selected$("TextGrid") 
 
-numberOfStrings = Get number of strings
-for stringNumber from 0 to numberOfStrings
-    selectObject: stringID
-    line$ = Get string: stringNumber
+numberOfIntervals = Get number of intervals: 1    ; (this is tier 1)
+
+for interval to numberOfIntervals
+    label$ = Get label of interval: 1, interval
+    if label$ != ""                               ; (we just want non-empty intervals)
+        xmin = Get start time of interval: 1, interval
+        xmax = Get end time of interval: 1, interval
+        appendFileLine: outputFile$, "'label$''tab$''xmin''tab$''xmax'"
+    endif
+endfor
 
 #2. parse by item in the phone tier to get the start_time$ and end_time$
     #this will not be difficult once the TextGrid info is here
