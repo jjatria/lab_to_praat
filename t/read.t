@@ -17,7 +17,7 @@ test_textgrid = Read from file: "test.TextGrid"
 #
 # removeObject: selected("TextGrid")
 
-runScript: "../read_lab.praat", "t/1.lab", "t/audio1.wav"
+runScript: "../scripts/read_lab.praat", "../t/1.lab", "../t/audio1.wav"
 @is_true: numberOfSelected("TextGrid"), "Script generates TextGrid with Sound"
 @is_true: numberOfSelected("Sound"),    "Script reads Sound"
 
@@ -29,38 +29,56 @@ textgrid_duration = Get total duration
 
 @is: test_duration, textgrid_duration, "TextGrid from Sound has same duration"
 
-selectObject: textgrid, test_textgrid
+selectObject: test_textgrid, textgrid
+pause
 @test_intervals()
 
 removeObject: textgrid
 removeObject: sound
 
 procedure test_intervals ()
-    .a = selected("TextGrid", 1)
-    .b = selected("TextGrid", 2)
+    .ref  = selected("TextGrid", 1)
+    .test = selected("TextGrid", 2)
 
-    selectObject: .a
-    .an = Get number of intervals: 1
+    selectObject: .ref
+    .ref_tiers = Get number of tiers
+    selectObject: .test
+    .test_tiers = Get number of tiers
+    @is: .ref_tiers, .test_tiers, "Same number of tiers"
 
-    selectObject: .b
-    .bn = Get number of intervals: 1
+    if ok.value
+        for .tier to .test_tiers
+            selectObject: .test
+            @is_true: do("Is interval tier...", .tier), "Tier '.tier' is interval tier"
 
-    .min = min(.an, .bn)
-    for .i to .min
-      selectObject: .a
-      .a$ = Get label of interval: 1, .i
-      .as = Get start time of interval: 1, .i
-      .ae = Get end time of interval: 1, .i
+            selectObject: .test
+            .test_intervals = Get number of intervals: .tier
 
-      selectObject: .b
-      .b$ = Get label of interval: 1, .i
-      .bs = Get start time of interval: 1, .i
-      .be = Get end time of interval: 1, .i
+            @diag: "Testing '.test_intervals' intervals"
+            for .i to .test_intervals
+                selectObject: .test
+                .interval = .i
+                .test_label$ = Get label of interval:      .tier, .interval
+                .test_start  = Get start time of interval: .tier, .interval
+                .test_end    = Get end time of interval:   .tier, .interval
+                .mid         = .test_start + (.test_end - .test_start) / 2
 
-      @is$: .a$, .b$, "Interval label " + string$(.i)
-      @is:  .as, .bs, "Interval start " + string$(.i)
-      @is:  .ae, .be, "Interval end "   + string$(.i)
-    endfor
+                selectObject: .ref
+                .interval = Get interval at time: .tier, .mid
+                if .interval
+                    .ref_label$ = Get label of interval:      .tier, .interval
+                    .ref_start  = Get start time of interval: .tier, .interval
+                    .ref_end    = Get end time of interval:   .tier, .interval
+
+                    @is$: .test_label$, .ref_label$, "Interval label " + string$(.interval)
+                    @is:  .test_start,  .ref_start,  "Interval start " + string$(.interval)
+                    @is:  .test_end,    .ref_end,    "Interval end "   + string$(.interval)
+                else
+                    @diag: "No equivalent interval in reference data!"
+                endif
+            endfor
+        endfor
+    endif
 endproc
 
 removeObject: test_sound, test_textgrid
