@@ -10,7 +10,10 @@ clearinfo
 outputFile$ = new_lab_file_dir$
 tmpFile$ = "./tmp.txt"
 
+#Save TextGrid as intermediate file <-This should be removed later
 selectObject: 2
+
+writeFile: tmpFile$, ""                        ; start from an empty .txt
 writeFile: outputFile$, ""                        ; start from an empty .txt
 
 #2. parse by item in the phone tier to get the start_time$ and end_time$
@@ -31,7 +34,7 @@ for interval to numberOfIntervals
         #for some reason these replaces don't work inside the procedure... any ideas why?
         xmin$ = replace_regex$ (xmin$, "^", "000000000", 1)
         xmin$ = replace_regex$ (xmin$, "[0-9]*([0-9]{9})$", "\1", 0)
-       # appendInfoLine: xmin$
+       #appendInfoLine: xmin$
 
         xmax$ = string$(xmax)
         @replace: xmax$
@@ -39,7 +42,7 @@ for interval to numberOfIntervals
         xmax$=string$(xmax)
         xmax$ = replace_regex$ (xmax$, "^", "000000000", 1)
         xmax$ = replace_regex$ (xmax$, "[0-9]*([0-9]{9})$", "\1", 0)
-      #  appendInfoLine: xmax$
+        #appendInfoLine: xmax$
 
 
         appendFileLine: tmpFile$, "'xmin$'" + " " + "'xmax$'"
@@ -67,27 +70,33 @@ for stringNumber from 1 to numberOfStrings
 
     #Get info from each column
     #This is really ugly but it works, is there a more elegant way to do this?
-    where = startsWith (line$, "0") or startsWith (line$, "1")
+    where = startsWith (line$, "0") or startsWith (line$, "1") or startsWith (line$, "2")
     if where == 1
         phone$ = Get string: 3
         #URGENT: This produces the right format but not the correct time stamps, just the last.  Need a solution for this
         a = Read Strings from raw text file: tmpFile$
         line$ = Get string: stringNumber-2
         appendFileLine: outputFile$, "'line$'" + " " + "'phone$'"
+        removeObject: stringID_parsed
+        removeObject: a
     endif
 endfor
 
+#Clean up...
+removeObject: stringID
+removeObject: "Strings tokens"
+removeObject: "Strings tokens"
+deleteFile: tmpFile$
 #6. paste the new time stamps with the old labels
     #what is the most elegant way to do this? 
 
 #7. write to a new lab file.
-#using the name defined in the window
 
 
 #string replace to format time in seconds
 procedure replace: .string$
         .string$ = replace_regex$ (.string$, "(\.[0-9]*[1-9])", "\10000000", 0)
-        .string$ = replace_regex$ (.string$, "([0-9]{7})0*$", "\1", 0)
+        .string$ = replace_regex$ (.string$, "(.[0-9]{7})[0-9]*", ".\1", 0)
         .string$ = replace_regex$ (.string$, "\.", "", 0)
         #for some reason the "^" isn't working here so I will copy it above.  Ugly but it will work
         #.string$ = replace_regex$ (.string$, "^", "000000000", 0)
