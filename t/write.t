@@ -50,6 +50,9 @@ test$ = readFile$(tempfile$)
 @is$: test$, head$[1] + block$[1] + head$[2] + block$[2], "multiple alternatives"
 @is: numberOfSelected("TextGrid"), 2, "multiple selection doesn't change"
 
+deleteFile: tempfile$
+@is_false: fileReadable(tempfile$), "removed temporary file"
+
 removeObject: tg[1], tg[2]
 
 @ok_selection()
