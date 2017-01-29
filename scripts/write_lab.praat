@@ -2,10 +2,6 @@ include ../../plugin_utils/procedures/check_filename.proc
 include ../../plugin_htklabel/procedures/timestamps.proc
 include ../../plugin_printf/procedures/printf.proc
 
-# Disable perl fallback to ensure correct handling of unicode
-# This needs to be corrected in plugin_printf
-printf.system = 0
-
 form Save as HTK label file...
     sentence Save_as
     comment  Leave paths empty for GUI selector

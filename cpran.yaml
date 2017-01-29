@@ -9,7 +9,7 @@ Depends:
   praat: 5.4.16+
   Plugins:
     utils: 0.0.0+
-    printf: 0.0.0+
+    printf: 0.0.3+
 Recommends:
 License: GPL3
 Readme: readme.md
