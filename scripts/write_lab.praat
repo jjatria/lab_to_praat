@@ -156,6 +156,7 @@ for h to hypotheses
               width  = Object_'widths'[1, field$]
 
               if left$(field$) != "L"
+                  width = if width < 9 then 9 else width fi
                   format$ = "%0" + string$(width) + "d"
                   value   = Object_'hypothesis'[r, field$]
                   call @:sprintf: format$, value
