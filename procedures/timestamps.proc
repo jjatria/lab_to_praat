@@ -1,0 +1,12 @@
+#string replace to format time in seconds
+procedure mlf_time_to_seconds: .mlf
+    .return = .mlf / 1e7
+endproc
+
+#string replace to format time in seconds
+procedure seconds_to_mlf_time: .time
+    .return$ = string$(.time * 1e7 div 1)
+    while length(.return$) < 9
+        .return$ = "0" + .return$
+    endwhile
+endproc
