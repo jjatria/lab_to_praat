@@ -18,7 +18,7 @@ endif
 Remove string: 1
 total_lines = Get number of strings
 
-mlfobject = Create Table with column names: selected$("Strings"), 0,
+mlf = Create Table with column names: selected$("Strings"), 0,
   ... "pattern mode target"
 
 immediate = 0
@@ -36,8 +36,8 @@ for i to total_lines
     if line$ == "."
       # @trace: "#'i':   End of transcription, pushing to table"
 
-      selectObject: mlfobject
-      Set string value: Object_'mlfobject'.nrow, "target", transcription$
+      selectObject: mlf
+      Set string value: Object_'mlf'.nrow, "target", transcription$
       transcription$ = ""
     else
       # @trace: "#'i':   Appending """ + line$ + """ to text"
