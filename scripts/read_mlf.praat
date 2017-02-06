@@ -55,41 +55,43 @@ for i to total_lines
         @dequote: split.return$[1]
         pattern$ = dequote.string$
 
-        mode$    = if split.return$[2] == "->" then "simple" else "full" fi
+        mode$ = if split.return$[2] == "->" then "simple" else "full" fi
 
         @dequote: split.return$[3]
         target$  = dequote.string$
 
-        selectObject: mlfobject
+        selectObject: mlf
         Append row
 
-        Set string value: Object_'mlfobject'.nrow, "pattern", pattern$
-        Set string value: Object_'mlfobject'.nrow, "mode",    mode$
-        Set string value: Object_'mlfobject'.nrow, "target",  target$
+        Set string value: Object_'mlf'.nrow, "pattern", pattern$
+        Set string value: Object_'mlf'.nrow, "mode",    mode$
+        Set string value: Object_'mlf'.nrow, "target",  target$
 
       endif
     else
       immediate = 1
 
-      selectObject: mlfobject
+      selectObject: mlf
       Append row
 
       @dequote: line$
-      Set string value: Object_'mlfobject'.nrow, "pattern", dequote.string$
-      Set string value: Object_'mlfobject'.nrow, "mode",    "direct"
+      Set string value: Object_'mlf'.nrow, "pattern", dequote.string$
+      Set string value: Object_'mlf'.nrow, "mode",    "direct"
     endif
   endif
 endfor
 removeObject: lines
-selectObject: mlfobject
+selectObject: mlf
 
 procedure abort: .reason$
   nocheck removeObject: lines
-  nocheck removeObject: mlfobject
+  nocheck removeObject: mlf
   exitScript: "Input file """'filename$'""" is not a valid MLF file: ",
     ... .reason$
 endproc
 
 procedure dequote: .string$
-  .string$ = replace_regex$(.string$, "(^""|""$)", "", 2)
+  if left$(.string$) == """" and right$(.string$) == """"
+    .string$ = replace_regex$(.string$, "(^""|""$)", "", 2)
+  endif
 endproc
