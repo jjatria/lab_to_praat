@@ -1,0 +1,11 @@
+procedure is_mlf ()
+  .columns$ = List: 0
+  .columns$ = tab$ + extractLine$(.columns$, "") + tab$
+
+  .return = 0
+  if .columns$ == tab$ + "pattern" + tab$ + "mode" + tab$ + "target" + tab$ and
+    ... Object_'mlf'.nrow
+
+    .return = 1
+  endif
+endproc
