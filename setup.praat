@@ -21,5 +21,6 @@
 
 ## Static commands:
 
-nocheck Add menu command:   "Objects",  "Open", "Read from HTK Label file...", "", 0, "scripts/read_lab.praat"
+nocheck Add menu command:   "Objects",  "Open", "Read HTK Label file...", "", 0, "scripts/read_lab.praat"
+nocheck Add menu command:   "Objects",  "Open", "Read HTK Master Label File...", "", 0, "scripts/read_mlf.praat"
 nocheck Add action command: "TextGrid", 0, "", 0, "", 0, "Save as HTK Label file...", "", 0, "scripts/write_lab.praat"
