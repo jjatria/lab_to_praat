@@ -46,7 +46,6 @@ for i to total_lines
   else
     # @trace: "#'i':   Not in an immediate transcription"
     if index_regex(line$, "\s[=-]\>\s")
-      appendInfoLine: "SubDirRef"
       line$ = replace_regex$(line$, "\s+", " ", 0)
       @split: " ", line$
 
