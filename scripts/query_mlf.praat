@@ -80,13 +80,17 @@ if found
     endfor
 
     if selected() == mlf
-      exitScript: "No match found"
+      @no_match: filename$
     endif
 
   endif
 else
-  exitScript: "No match found"
+  @no_match: filename$
 endif
+
+procedure no_match: .name$
+  exitScript: "No match found for ", .name$
+endproc
 
 procedure match_pattern: .name$, .pattern$, .type$
   if .type$ = "Glob"
