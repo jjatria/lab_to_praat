@@ -23,4 +23,8 @@
 
 nocheck Add menu command:   "Objects",  "Open", "Read HTK Label file...", "", 0, "scripts/read_lab.praat"
 nocheck Add menu command:   "Objects",  "Open", "Read HTK Master Label File...", "", 0, "scripts/read_mlf.praat"
+
 nocheck Add action command: "TextGrid", 0, "", 0, "", 0, "Save as HTK Label file...", "", 0, "scripts/write_lab.praat"
+
+nocheck Add action command: "Table", 1, "", 0, "", 0, "MLF Table -", "", 0, ""
+nocheck Add action command: "Table", 1, "", 0, "", 0, "Query path from MLF Table...", "MLF Table -", 1, "scripts/query_mlf.praat"
