@@ -1,8 +1,8 @@
 #!MLF!#
-"*/?.lab"      -> "./mlf/foo1"
-"*/foo?/c.lab" => "./mlf"
-"*/z.lab"
+"simple/*.lab" -> "./mlf/simple"
+"full/*.lab" => "./mlf"
+"*/*.lab"
  000000  990000  sil
-1000000 3090000  z
+1000000 3090000  default
 3100000 4200000  sil
 .
