@@ -1,5 +1,6 @@
 include ../../plugin_utils/procedures/check_filename.proc
 include ../../plugin_utils/procedures/utils.proc
+include ../../plugin_utils/procedures/paths.proc
 # include ../../plugin_utils/procedures/trace.proc
 # trace.enable = 1
 
@@ -10,6 +11,9 @@ endform
 @checkFilename: read_from$, "Choose MLF file..."
 filename$ = checkFilename.name$
 lines = Read Strings from raw text file: filename$
+
+@dirname: filename$
+path$ = dirname.return$
 
 if Object_'lines'$[1] != "#!MLF!#"
   @abort: "missing header"
@@ -62,6 +66,13 @@ for i to total_lines
 
         selectObject: mlf
         Append row
+
+        @normalise_path: target$
+        target$ = normalise_path.return$
+        @is_relative: target$
+        if is_relative.return
+          target$ = path$ + "/" + target$
+        endif
 
         Set string value: Object_'mlf'.nrow, "pattern", pattern$
         Set string value: Object_'mlf'.nrow, "mode",    mode$
