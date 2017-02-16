@@ -2,13 +2,14 @@
 Plugin: htklabel
 Homepage: http://cpran.net/plugins/htklabel
 Version: 0.0.1
-Maintainer: 
+Maintainer:
   - Cristopher Shulby <chrisshulby@gmail.com>
   - José Joaquín Atria <jjatria@gmail.com>
 Depends:
   praat: 5.4.16+
   Plugins:
     utils: 0.0.23+
+    strutils: 0.0.0+
     printf: 0.0.3+
 Recommends:
 License: GPL3
