@@ -1,4 +1,3 @@
-include ../../plugin_strutils/procedures/find_in_strings.proc
 include ../../plugin_strutils/procedures/strings_from_string.proc
 include ../../plugin_utils/procedures/utils.proc
 include ../../plugin_utils/procedures/paths.proc
