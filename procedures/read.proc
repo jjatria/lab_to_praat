@@ -1,5 +1,45 @@
+# This script is part of the htklabel CPrAN plugin for Praat.
+# The latest version is available through CPrAN or at
+# <http://cpran.net/plugins/htklabel>
+#
+# The htklabel plugin is free software: you can redistribute it
+# and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation, either
+# version 3 of the License, or (at your option) any later version.
+#
+# The htklabel plugin is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+# of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with htklabel. If not, see <http://www.gnu.org/licenses/>.
+#
+# Copyright 2017 Christopher Shulby, Jose Joaquin Atria
+
 include ../../plugin_htklabel/procedures/timestamps.proc
 
+#! ~~~ params
+#! out:
+#!   .hyp[]: The ID numbers of all generated hypotheses
+#!   .hypotheses: The total number of hypotheses
+#! selection:
+#!   in:
+#!     strings: 1
+#!   out:
+#!     textgrid: 0
+#! ~~~
+#!
+#! Read an HTK/HTS label file and convert it to a set of Praat TextGrid
+#! objects.
+#!
+#! Multiple alternatives within a label file will result in separate TextGrid
+#! objects, while multiple levels within each alternative will be mapped to
+#! individual tiers within each TextGrid.
+#!
+#! Since only interval tiers are generated at the moment, only label files
+#! with both start and end times are supported.
+#!
 procedure read_lab ()
     .strings = selected("Strings")
     .sound = numberOfSelected("Sound")
@@ -94,6 +134,21 @@ procedure read_lab ()
     endif
 endproc
 
+#! ~~~ params
+#! in:
+#!   .line$: The line to parse
+#! out:
+#!   .start: The start time of the current line
+#!   .end:   The end time of the current line
+#!   .levels: The total number of levels found in the current line
+#!   .name$[]: An indexed variable with the names of the labels in each level
+#! ~~~
+#!
+#! Parse one line in a label file to extract timestamps, labels, scores, and
+#! comments. However, scores are currently ignored, and comments are not
+#! currently supported because of ambiguities in the documentation. And even
+#! if they weren't, they'd probably still be ignored.
+#!
 procedure parse_lab_line: .line$
     .times$ = replace_regex$(.line$, "^\s*([0-9]+)\s+([0-9]+).*", "\1:\2", 1)
     .names$ = replace_regex$(.line$, "^\s*[0-9]+\s+[0-9]+\s+", "", 1)
@@ -116,4 +171,3 @@ procedure parse_lab_line: .line$
     until .names$ == "" or .i > 100
     .levels = .i
 endproc
-

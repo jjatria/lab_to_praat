@@ -1,9 +1,46 @@
+# This script is part of the htklabel CPrAN plugin for Praat.
+# The latest version is available through CPrAN or at
+# <http://cpran.net/plugins/htklabel>
+#
+# The htklabel plugin is free software: you can redistribute it
+# and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation, either
+# version 3 of the License, or (at your option) any later version.
+#
+# The htklabel plugin is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+# of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with htklabel. If not, see <http://www.gnu.org/licenses/>.
+#
+# Copyright 2017 Christopher Shulby, Jose Joaquin Atria
+
 include ../../plugin_utils/procedures/check_filename.proc
 include ../../plugin_utils/procedures/utils.proc
 include ../../plugin_utils/procedures/paths.proc
 # include ../../plugin_utils/procedures/trace.proc
 # trace.enable = 1
 
+#! ~~~ params
+#! in:
+#!   Read from: (sentence) The path of the file to read
+#! selection:
+#!   out:
+#!     table: 1
+#! ~~~
+#!
+#! Read an HTK/HTS Master Label File.
+#!
+#! Master Label Files map a series of filename patterns to either annotations
+#! that are contained in the file itself, or to subdirectories where the
+#! specified file shold be found.
+#!
+#! A representation of this mapping is stored as a Table object, on which
+#! filename queries can be made using the `MLF query...` script in this
+#! plugin.
+#!
 form Read MLF file...
   sentence Read_from
 endform
