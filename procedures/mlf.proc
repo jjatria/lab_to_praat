@@ -18,32 +18,24 @@
 # Copyright 2017 Christopher Shulby, Jose Joaquin Atria
 
 #! ~~~ params
-#! in:
-#!   .mlf: Timestamp from the HTK label
 #! out:
-#!   .return: The equivalent time in seconds
+#!   .return: True if the selected Table object represents an MLF file
+#! selection:
+#!   in:
+#!     table: 1
 #! ~~~
 #!
-#! Convert a HTK/HTS label file timestamp to seconds.
+#! Check whether the selected Table object is a valid representation of
+#! an HTK/HTS MLF file.
 #!
-procedure mlf_time_to_seconds: .mlf
-    .return = .mlf / 1e7
-endproc
+procedure is_mlf ()
+  .columns$ = List: 0
+  .columns$ = tab$ + extractLine$(.columns$, "") + tab$
 
-#! ~~~ params
-#! in:
-#!   .time: A time in seconds
-#! out:
-#!   .return$: The equivalent time in HTk/HTS label timestamp format
-#! ~~~
-#!
-#! Convert a time in seconds to a timestamp suitable to be used in a HTK/HTS
-#! label file. The final timestamp is returned as a string zero-padded to a
-#! length of 9 characters.
-#!
-procedure seconds_to_mlf_time: .time
-    .return$ = string$(.time * 1e7 div 1)
-    while length(.return$) < 9
-        .return$ = "0" + .return$
-    endwhile
+  .return = 0
+  if .columns$ == tab$ + "pattern" + tab$ + "mode" + tab$ + "target" + tab$ and
+    ... Object_'mlf'.nrow
+
+    .return = 1
+  endif
 endproc

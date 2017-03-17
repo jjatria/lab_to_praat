@@ -1,0 +1,10 @@
+#!MLF!#
+"simple/*.lab" -> "./mlf/simple"
+"full/*.lab"   => "./mlf"
+"*.Pitch"      -> "./objects"
+"*.Intensity"  -> "./objects"
+"*/*.lab"
+ 000000  990000  sil
+1000000 3090000  default
+3100000 4200000  sil
+.

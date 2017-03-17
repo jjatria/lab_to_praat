@@ -1,7 +1,45 @@
+# This script is part of the htklabel CPrAN plugin for Praat.
+# The latest version is available through CPrAN or at
+# <http://cpran.net/plugins/htklabel>
+#
+# The htklabel plugin is free software: you can redistribute it
+# and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation, either
+# version 3 of the License, or (at your option) any later version.
+#
+# The htklabel plugin is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+# of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with htklabel. If not, see <http://www.gnu.org/licenses/>.
+#
+# Copyright 2017 Christopher Shulby, Jose Joaquin Atria
+
 include ../../plugin_utils/procedures/check_filename.proc
 include ../../plugin_htklabel/procedures/timestamps.proc
 include ../../plugin_printf/procedures/printf.proc
 
+#! ~~~ params
+#! in:
+#!   Save as: (sentence) The path of the file to write
+#! selection:
+#!   in:
+#!     textgrid: 0
+#! ~~~
+#!
+#! Write an HTK/HTS label file from a set of Praat TextGrid objects.
+#!
+#! The mapping done by this script is the opposite from that done by the
+#! `@read_lab` procedure and the `Read HTK label file...` script in this plugin.
+#! Multiple TextGrid objects will be mapped to different alternatives within
+#! a single label file, and multiple interval tiers will be mapped to as many
+#! levels for the corresponding alternative.
+#!
+#! Since only interval tiers are supported at the moment, all lines in the
+#! generated label files will have start and end times.
+#!
 form Save as HTK label file...
     sentence Save_as
     comment  Leave paths empty for GUI selector
