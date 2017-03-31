@@ -20,4 +20,5 @@ script:
   
 cache:
   directories:
+  - $PERLBREW_ROOT
   - $HOME/.praat-dir
