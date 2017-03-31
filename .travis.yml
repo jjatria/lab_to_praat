@@ -15,6 +15,9 @@ install:
 
 before_script:
   - cpran deps | cpran install --notest --reinstall -
+  - mkdir -p $HOME/.local/bin
+  - cpran install praat:6.0.28 --barren --yes --path $HOME/.local/bin
+  - export PATH=$HOME/.local/bin:$PATH
   - cpran --version
 
 script:
