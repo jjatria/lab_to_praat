@@ -9,7 +9,7 @@ install:
   - cpran update
 
 before_script:
-  - cpran deps | cpran --notest --reinstall install -
+  - cpran deps | cpran install --notest --reinstall -
   - mkdir -p $HOME/.local/bin
   - cpran install praat --path $HOME/.local/bin
   - export PATH=$HOME/.local/bin:$PATH
