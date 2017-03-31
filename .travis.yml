@@ -4,7 +4,7 @@ language: perl
 
 install:
   - yes | perlbrew install-cpanm
-  - cpanm https://gitlab.com/cpran/CPrAN.git
+  - cpanm --notest https://gitlab.com/cpran/CPrAN.git
   - cpran init
   - cpran update
 
