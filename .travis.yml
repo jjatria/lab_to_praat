@@ -3,7 +3,8 @@ sudo: false
 language: perl
 
 env:
-  - PATH=$HOME/.local/bin:$PATH
+  global:
+    - PATH=$HOME/.local/bin:$PATH
 
 install:
   - yes | perlbrew install-cpanm
