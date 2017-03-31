@@ -2,13 +2,17 @@ sudo: false
 
 language: perl
 
-before_script:
+install:
   - cpanm -v https://gitlab.com/cpran/CPrAN.git
   - cpran init
   - cpran update
 
-install:
+before_script:
   - cpran deps | cpran --notest --reinstall install
+  - mkdir -p $HOME/.local/bin
+  - cpran install praat --path $HOME/.local/bin
+  - export PATH=$HOME/.local/bin:$PATH
+  - cpran --version
 
 script:
   - cpran test
