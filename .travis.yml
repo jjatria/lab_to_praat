@@ -13,7 +13,7 @@ before_script:
   - cpran upgrade
   - mkdir -p $HOME/.local/bin
   - cpran install praat:6.0.28 --barren --yes --path $HOME/.local/bin
-  - ls -l $HOME/.local/bin
+  - chmod 755 $HOME/.local/bin/praat
   - cpran --version
   - echo $PATH
 
