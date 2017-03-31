@@ -1,0 +1,18 @@
+sudo: false
+
+language: perl
+
+before_script:
+  - cpanm -v https://gitlab.com/cpran/CPrAN.git
+  - cpran init
+  - cpran update
+
+install:
+  - cpran deps | cpran --notest --reinstall install
+
+script:
+  - cpran test
+  
+cache:
+  directories:
+  - $HOME/.praat-dir
