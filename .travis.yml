@@ -3,7 +3,7 @@ sudo: false
 language: perl
 
 install:
-  - cpanm App::cpanminus
+  - cpanm -v App::cpanminus
   - cpanm -v https://gitlab.com/cpran/CPrAN.git
   - cpran init
   - cpran update
