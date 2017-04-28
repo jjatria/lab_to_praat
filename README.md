@@ -33,3 +33,20 @@ The full list of dependencies (pointing to their git repositories) is
 * [strutils](https://gitlab.com/cpran/plugin_strutils)
 
 [1]: http://cpran.net/clients/cpran/#installation
+
+## Plugin Use
+
+From the object window the user may open...
+
+1. ".lab" file by selecting Open > Read HTK Label File;
+2. ".mlf" file by selecting Open > Read HTK Master Label File;
+
+When one of these tabs is selected a menu will appear prompting the user to include the path to the .lab or .mlf file desired.
+
+Optionally, the user may also include a corresponding audio file which has been aligned with the labels.
+	-it is important to note that if the user chooses to include an audio file, it is also necessay to check the box below "Use sound file", otherwise teh audio will not load.
+
+By default, the box "Discard context" is also left unchecked. This will load the entire phonological context in the label file.
+If the user wishes to diplay only the central phoneme, it is necessay to check this box as well.
+
+
