@@ -1,5 +1,5 @@
 
-This is the REAMDE for the htklabel CPrAN plugin for Praat.
+This is the README for the htklabel CPrAN plugin for Praat.
 The latest version is available through CPrAN or at
 <http://cpran.net/plugins/htklabel>
 
