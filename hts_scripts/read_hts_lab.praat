@@ -1,58 +1,50 @@
-###############################################################
-###############################################################
-##This code will:
-##1. Read a lab file in HTS format into a Praat TextGrid
-##   with a single tier ("phone")
-##2. Load both the audio and labels as objects
-##3. open the aligned TextGrid and phonetic tier for editing
-###############################################################
-###############################################################
+# This script is part of the htklabel CPrAN plugin for Praat.
+# The latest version is available through CPrAN or at
+# <http://cpran.net/plugins/htklabel>
+#
+# The htklabel plugin is free software: you can redistribute it
+# and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation, either
+# version 3 of the License, or (at your option) any later version.
+#
+# The htklabel plugin is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+# of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with htklabel. If not, see <http://www.gnu.org/licenses/>.
+#
+# Copyright 2017 Christopher Shulby, Jose Joaquin Atria
 
-#Allow Input
-form Info
-    sentence Lab_file_dir /home/badner/Desktop/lab_to_praat/1.lab
-    sentence Sound_dir  /home/badner/Desktop/lab_to_praat/audio1.wav
+include ../procedures/read.proc
+include ../../plugin_utils/procedures/check_filename.proc
+
+form Read HTK label file...
+    sentence Path_to_label
+    sentence Path_to_audio_(optional)
+    comment  Leave paths empty for GUI selectors
+    boolean  Use_sound_file no
+    boolean  Discard_context no
 endform
 
-clearinfo
+@checkFilename: path_to_label$, "Select HTK label file..."
+path_to_label$ = checkFilename.name$
+strings = Read Strings from raw text file: path_to_label$
 
-#Open wav file
-soundID = Read from file: sound_dir$
-tgID = To TextGrid: "phone", ""
+if use_sound_file
+    @checkFilename: path_to_audio$, "Select sound file..."
+    path_to_audio$ = checkFilename.name$
+    sound = Read from file: path_to_audio$
 
-#read the .lab file into praat
+    plusObject: strings
+endif
 
-stringID = Read Strings from raw text file: lab_file_dir$
-numberOfStrings = Get number of strings
+@read_lab()
+removeObject: strings
 
-for stringNumber to numberOfStrings
-    selectObject: stringID
-    line$ = Get string: stringNumber
-
-    if !index_regex(line$, "^\s*//")
-        @replace: extractNumber(line$, "")
-        time_start = replace.number
-
-        @replace: extractNumber(line$, " ")
-        time_end   = replace.number
-
-        label$     = replace_regex$(line$, ".*\s(.*)$", "\1", 1)
-
-        selectObject: tgID
-        #Insert boundaries
-        nocheck Insert boundary: 1, time_start
-        nocheck Insert boundary: 1, time_end
-        interval = Get low interval at time: 1, time_end
-        Set interval text: 1, interval, label$
-    endif
-endfor
-
-Replace interval text: 1, 0, 0, "^.*?-([^+]*?)\+.*", "\1", "Regular Expressions"
-
-removeObject: stringID
-selectObject: soundID, tgID
-
-#string replace to format time in seconds
-procedure replace: .number
-    .number /= 1e7
-endproc
+if discard_context
+    nocheck minusObject: sound
+    Replace interval text: 1, 0, 0, "^.*?-([^+]*?)\+.*", "\1", "Regular Expressions"
+    nocheck plusObject: sound
+endif

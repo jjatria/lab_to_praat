@@ -1,57 +1,53 @@
-#Allow Input
-form Info
-    sentence New_lab_file_dir /home/badner/Desktop/lab_to_praat/1_revised.lab
-    sentence Lab_file_dir /home/badner/Desktop/lab_to_praat/1.lab
+# This script is part of the htklabel CPrAN plugin for Praat.
+# The latest version is available through CPrAN or at
+# <http://cpran.net/plugins/htklabel>
+#
+# The htklabel plugin is free software: you can redistribute it
+# and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation, either
+# version 3 of the License, or (at your option) any later version.
+#
+# The htklabel plugin is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+# of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with htklabel. If not, see <http://www.gnu.org/licenses/>.
+#
+# Copyright 2017 Christopher Shulby, Jose Joaquin Atria
+
+include ../../plugin_utils/procedures/check_filename.proc
+include ../../plugin_htklabel/procedures/timestamps.proc
+include ../../plugin_printf/procedures/printf.proc
+
+#! ~~~ params
+#! in:
+#!   Save as: (sentence) The path of the file to write
+#! selection:
+#!   in:
+#!     textgrid: 0
+#! ~~~
+#!
+#! Write an HTK/HTS label file from a set of Praat TextGrid objects.
+#!
+#! The mapping done by this script is the opposite from that done by the
+#! `@read_lab` procedure and the `Read HTK label file...` script in this plugin.
+#! Multiple TextGrid objects will be mapped to different alternatives within
+#! a single label file, and multiple interval tiers will be mapped to as many
+#! levels for the corresponding alternative.
+#!
+#! Since only interval tiers are supported at the moment, all lines in the
+#! generated label files will have start and end times.
+#!
+form Save as HTK label file...
+    sentence Save_as
+    comment  Leave paths empty for GUI selector
 endform
 
-clearinfo
+#import the strings from the original lab file and save comments in header from the first two lines.
 
-#1. read strings from TextGrid object already open in the gui into the info window
-outputFile$ = new_lab_file_dir$
-tmpFile$ = "C:\Users\coleta_biometria\Desktop\tmp.txt"
-
-#Save TextGrid as intermediate file <-This should be removed later
-selectObject: 2
-
-writeFile: tmpFile$, ""                        ; start from an empty .txt
-writeFile: outputFile$, ""                        ; start from an empty .txt
-
-#2. parse by item in the phone tier to get the start_time$ and end_time$
-
-numberOfIntervals = Get number of intervals: 1    ; (this is tier 1)
-
-for interval to numberOfIntervals
-    label$ = Get label of interval: 1, interval
-    if label$ != ""                               ; (we just want non-empty intervals)
-        xmin = Get start time of interval: 1, interval
-        xmax = Get end time of interval: 1, interval
-
-#3. convert the times back to e-07 format with leading zeros.
-        xmin$ = string$(xmin)
-        @replace: xmin$
-        xmin  = number(replace.string$)
-        xmin$=string$(xmin)
-        #for some reason these replaces don't work inside the procedure... any ideas why?
-        xmin$ = replace_regex$ (xmin$, "^", "000000000", 1)
-        xmin$ = replace_regex$ (xmin$, "[0-9]*([0-9]{9})$", "\1", 0)
-       #appendInfoLine: xmin$
-
-        xmax$ = string$(xmax)
-        @replace: xmax$
-        xmax  = number(replace.string$)
-        xmax$=string$(xmax)
-        xmax$ = replace_regex$ (xmax$, "^", "000000000", 1)
-        xmax$ = replace_regex$ (xmax$, "[0-9]*([0-9]{9})$", "\1", 0)
-        #appendInfoLine: xmax$
-
-
-        appendFileLine: tmpFile$, "'xmin$'" + " " + "'xmax$'"
-    endif
-endfor
-#4. import the strings from the original lab file like we did in read lab.
-    #this can be copied from the read_lab scripts newest version
-
-stringID = Read Strings from raw text file: lab_file_dir$
+stringID = Read Strings from raw text file: path_to_label$
 numberOfStrings = Get number of strings
 
 for stringNumber from 1 to 2
@@ -60,45 +56,172 @@ for stringNumber from 1 to 2
     appendFileLine: outputFile$, line$
 endfor
 
-for stringNumber from 1 to numberOfStrings
-    selectObject: stringID
-    line$ = Get string: stringNumber
-    stringID_parsed = Create Strings as tokens: line$
-    nStrings_parsed = Get number of strings
+total_textgrids = numberOfSelected("TextGrid")
 
-#5. parse to get the labels (the part with the pentaphones and the features -->ex. "uw^ac-zz+nn=ac/P1:+4/P2:+6/P3:+0" ) #remember the number of phones must be static.  The user should not add or delete a boundary because if the phonetic transcription is not correct, this should be corrected before it gets to the lab file, otherwise the training process in HTS or HTK will fail anyway.
-
-    #Get info from each column
-    #This is really ugly but it works, is there a more elegant way to do this?
-    where = startsWith (line$, "0") or startsWith (line$, "1") or startsWith (line$, "2")
-    if where == 1
-        phone$ = Get string: 3
-        #URGENT: This produces the right format but not the correct time stamps, just the last.  Need a solution for this
-        a = Read Strings from raw text file: tmpFile$
-        line$ = Get string: stringNumber-2
-        appendFileLine: outputFile$, "'line$'" + " " + "'phone$'"
-        removeObject: stringID_parsed
-        removeObject: a
-    endif
+for t to total_textgrids
+    textgrid[t] = selected("TextGrid", t)
 endfor
 
-#Clean up...
-removeObject: stringID
-removeObject: "Strings tokens"
-removeObject: "Strings tokens"
-deleteFile: tmpFile$
-#6. paste the new time stamps with the old labels
-    #what is the most elegant way to do this? 
+@checkWriteFile: save_as$, "Save as HTK label file...", selected$("TextGrid") + ".lab"
+output_file$ = checkWriteFile.name$
 
-#7. write to a new lab file.
+# Generate output tables
+for hypothesis to total_textgrids
+    new_hypothesis = 1
 
+    textgrid = textgrid[hypothesis]
+    selectObject: textgrid
+    lowest_tier = Get number of tiers
+    total_intervals = Get number of intervals: lowest_tier
 
-#string replace to format time in seconds
-procedure replace: .string$
-        .string$ = replace_regex$ (.string$, "(\.[0-9]*[1-9])", "\10000000", 0)
-        .string$ = replace_regex$ (.string$, "(.[0-9]{7})[0-9]*", ".\1", 0)
-        .string$ = replace_regex$ (.string$, "\.", "", 0)
-        #for some reason the "^" isn't working here so I will copy it above.  Ugly but it will work
-        #.string$ = replace_regex$ (.string$, "^", "000000000", 0)
-        #.string$ = replace_regex$ (.string$, "[0-9]*([0-9]{9})$", "\1", 0)
-endproc
+    output[hypothesis] = Create Table with column names: selected$("TextGrid"), 0,
+        ... "start end"
+    output = output[hypothesis]
+
+    selectObject: textgrid
+    for i to total_intervals
+        tier = lowest_tier
+
+        this = Get start time of interval: tier, i
+        if i == total_intervals
+            next = Get total duration
+        else
+            next = Get start time of interval: tier, i+1
+        endif
+
+        repeat
+            interval = Get high interval at time: tier, this
+            label$ = Get label of interval: tier, interval
+
+            if this == 0
+                boundary = 1
+            else
+                boundary = Get interval edge from time: tier, this
+            endif
+
+            if boundary and label$ != "" and !index_regex(label$, "\s")
+                if tier == lowest_tier
+                    selectObject: output
+                    Append row
+
+                    @seconds_to_mlf_time: this
+                    Set numeric value: Object_'output'.nrow, "start", number(seconds_to_mlf_time.return$)
+
+                    @seconds_to_mlf_time: next
+                    Set numeric value: Object_'output'.nrow, "end", number(seconds_to_mlf_time.return$)
+
+                    selectObject: textgrid
+                endif
+
+                selectObject: output
+                col$ = "L" + string$(lowest_tier - tier + 1)
+                if !do("Get column index...", col$)
+                    Insert column: Object_'output'.ncol + 1, col$
+                endif
+                Set string value: Object_'output'.nrow, col$, label$
+
+                selectObject: textgrid
+                tier -= 1
+            else
+                tier = 0
+            endif
+        until !tier
+    endfor
+endfor
+
+# Delete empty output tables
+selectObject()
+hypotheses = 0
+max_cols = 0
+for t to total_textgrids
+     output = output[t]
+     if Object_'output'.nrow
+        hypotheses += 1
+        hypothesis[hypotheses] = output
+        plusObject: output
+        if Object_'output'.ncol > max_cols
+            max_cols = Object_'output'.ncol
+            max_id   = output
+        endif
+     else
+        removeObject: output
+     endif
+endfor
+
+# Make sure all output tables have the same number
+# of columns, with the same labels
+for h to hypotheses
+    hypothesis = hypothesis[h]
+    while Object_'hypothesis'.ncol < max_cols
+        selectObject: max_id
+        label$ = Get column label: Object_'hypothesis'.ncol + 1
+
+        selectObject: hypothesis
+        Insert column: Object_'hypothesis'.ncol + 1, label$
+    endwhile
+endfor
+
+# Calculate maximum required field widths for each field
+selectObject()
+for h to hypotheses
+    plusObject: hypothesis[h]
+endfor
+
+fields = Append
+first$ = Get column label: 1
+last$  = Get column label: Object_'fields'.ncol
+Formula (column range): first$, last$, "length(self$)"
+
+# Get maximum width per field (=column)
+widths = Create Table without column names: "widths", 1, Object_'fields'.ncol
+for c to Object_'fields'.ncol
+    selectObject: fields
+    label$ = Get column label: c
+    max = Get maximum: label$
+    selectObject: widths
+    Set column label (index): c, label$
+    Set numeric value: 1, label$, max
+endfor
+removeObject: fields
+
+# Write the output tables to the output file
+writeFile: output_file$, ""
+for h to hypotheses
+     hypothesis = hypothesis[h]
+
+     selectObject: hypothesis
+      if hypotheses > 1
+          appendFileLine: output_file$, "/// ", selected$("Table")
+      endif
+
+      for r to Object_'hypothesis'.nrow
+          line$ = ""
+          for c to Object_'hypothesis'.ncol
+              field$ = Get column label: c
+              width  = Object_'widths'[1, field$]
+
+              if left$(field$) != "L"
+                  width = if width < 9 then 9 else width fi
+                  format$ = "%0" + string$(width) + "d"
+                  value   = Object_'hypothesis'[r, field$]
+                  call @:sprintf: format$, value
+              else
+                  format$ = "%-" + string$(width) + "s"
+                  value$  = Object_'hypothesis'$[r, field$]
+                  call @:sprintf: format$, "'value$'"
+              endif
+              line$ = line$ + sprintf.return$ + " "
+          endfor
+          line$ = replace_regex$(line$, "\s+$", "", 0)
+          appendFileLine: output_file$, line$
+      endfor
+
+      removeObject: hypothesis
+endfor
+removeObject: widths
+
+# Restore original selection
+selectObject()
+for t to total_textgrids
+    plusObject: textgrid[t]
+endfor
