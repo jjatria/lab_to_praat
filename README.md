@@ -58,8 +58,8 @@ The full list of dependencies (pointing to their git repositories) is
 
 From the object window the user may open...
 
-1. ".lab" file by selecting Open > Read HTK Label File;
-2. ".mlf" file by selecting Open > Read HTK Master Label File;
+1. ".lab" file by selecting Open > Read HTK Label File... ;
+2. ".mlf" file by selecting Open > Read HTK Master Label File... ;
 
 When one of these tabs is selected a menu will appear prompting the user to include the path to the .lab or .mlf file desired.
 
@@ -69,4 +69,12 @@ Optionally, the user may also include a corresponding audio file which has been 
 By default, the box "Discard context" is also left unchecked. This will load the entire phonological context in the label file.
 If the user wishes to diplay only the central phoneme, it is necessay to check this box as well.
 
+To Save a file...
 
+The user may click on Save > Save as HTK Label File... or Save > Save as HTK Master Label File... , respectively.
+
+## Selective Revision
+
+The user may wish top open a View & Edit Window to a specific interval to revise specific boundries manually.  In the case it is necessary to call praat from the command line using the following command:
+
+HTS_SOUND_FILE="<PATH TO SOUND FILE>" HTS_TEXTGRID_FILE="<PATH TO LABEL FILE>" START_TIME="<BEGINNING OF INTERVAL>" END_TIME="<END OF INTERVAL>" praat
