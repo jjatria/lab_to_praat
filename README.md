@@ -33,6 +33,7 @@ plugin by typing
 
 > NOTE: this will not work until registration on CPrAN is complete, which
 > should be soon.
+> if this does not work you may clobe this repo to your PRAAT preferences directory.
 
 After that, you should be able to read `.lab` and `.mlf` files using the
 commands in the `Open` menu, and save TextGrid objects as labels using the
