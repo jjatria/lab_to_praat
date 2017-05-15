@@ -33,7 +33,7 @@ nocheck Add action command: "Table", 1, "", 0, "", 0, "MLF Table -", "", 0, ""
 nocheck Add action command: "Table", 1, "", 0, "", 0, "Query path from MLF Table...", "MLF Table -", 1, "scripts/query_mlf.praat"
 
 sound$ = environment$("HTS_SOUND_FILE")
-textgrid$ = environment$("HTS_TEXTGRID_FILE")
+textgrid$ = environment$("HTS_LABEL_FILE")
 start$ = environment$("START_TIME")
 end$ = environment$("END_TIME")
 
