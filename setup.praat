@@ -21,6 +21,9 @@
 
 ## Static commands:
 
+include scripts/read.proc
+include scripts/timestamps.proc
+
 nocheck Add menu command:   "Objects",  "Open", "Read HTK Label file...", "", 0, "scripts/read_lab.praat"
 nocheck Add menu command:   "Objects",  "Open", "Read HTK Master Label File...", "", 0, "scripts/read_mlf.praat"
 
@@ -28,3 +31,29 @@ nocheck Add action command: "TextGrid", 0, "", 0, "", 0, "Save as HTK Label file
 
 nocheck Add action command: "Table", 1, "", 0, "", 0, "MLF Table -", "", 0, ""
 nocheck Add action command: "Table", 1, "", 0, "", 0, "Query path from MLF Table...", "MLF Table -", 1, "scripts/query_mlf.praat"
+
+sound$ = environment$("HTS_SOUND_FILE")
+textgrid$ = environment$("HTS_TEXTGRID_FILE")
+start$ = environment$("START_TIME")
+end$ = environment$("END_TIME")
+
+if sound$ != "" and textgrid$ != ""
+    sound = Read from file: sound$
+    strings= Read Strings from raw text file: textgrid$
+    @read_lab()
+
+form Info
+    start = postive start$
+    end = positive end$
+endform
+
+    selectObject: sound, 3
+    View & Edit
+    editor = 3
+    editor: editor
+    Select: number(start$) , number(end$)
+    Zoom to selection
+    endeditor
+endif
+
+
