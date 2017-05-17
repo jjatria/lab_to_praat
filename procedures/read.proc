@@ -17,7 +17,7 @@
 #
 # Copyright 2017 Christopher Shulby, Jose Joaquin Atria
 
-include ../../plugin_htklabel/procedures/timestamps.proc
+include ./timestamps.proc
 
 #! ~~~ params
 #! out:
