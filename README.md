@@ -72,7 +72,7 @@ If the user wishes to diplay only the central phoneme, it is necessay to check t
 
 To Save a file...
 
-The user may click on Save > Save as HTK Label File... or Save > Save as HTK Master Label File... , respectively.
+The user may click on Save > Save as HTK Label File with comments... (if you want to save the original comments at the top of your lab file),  Save > Save as HTK Label File without comments... (this is what most people will likely use) or Save > Save as HTK Master Label File... (if you are saving an .mlf).
 
 ## Selective Revision
 
