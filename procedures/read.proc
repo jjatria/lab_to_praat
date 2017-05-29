@@ -17,7 +17,37 @@
 #
 # Copyright 2017 Christopher Shulby, Jose Joaquin Atria
 
-include ./timestamps.proc
+#! ~~~ params
+#! in:
+#!   .mlf: Timestamp from the HTK label
+#! out:
+#!   .return: The equivalent time in seconds
+#! ~~~
+#!
+#! Convert a HTK/HTS label file timestamp to seconds.
+#!
+procedure mlf_time_to_seconds: .mlf
+    .return = .mlf / 1e7
+endproc
+
+#! ~~~ params
+#! in:
+#!   .time: A time in seconds
+#! out:
+#!   .return$: The equivalent time in HTk/HTS label timestamp format
+#! ~~~
+#!
+#! Convert a time in seconds to a timestamp suitable to be used in a HTK/HTS
+#! label file. The final timestamp is returned as a string zero-padded to a
+#! length of 9 characters.
+#!
+procedure seconds_to_mlf_time: .time
+    .return$ = string$(.time * 1e7 div 1)
+    while length(.return$) < 9
+        .return$ = "0" + .return$
+    endwhile
+endproc
+
 
 #! ~~~ params
 #! out:

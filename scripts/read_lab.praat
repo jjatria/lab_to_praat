@@ -17,8 +17,7 @@
 #
 # Copyright 2017 Christopher Shulby, Jose Joaquin Atria
 
-include read.proc
-include timestamps.proc
+include ../procedures/read.proc
 include ../../plugin_utils/procedures/check_filename.proc
 
 form Read HTK label file...

@@ -21,8 +21,7 @@
 
 ## Static commands:
 
-include scripts/read.proc
-include scripts/timestamps.proc
+include procedures/read.proc
 
 nocheck Add menu command:   "Objects",  "Open", "Read HTK Label file...", "", 0, "scripts/read_lab.praat"
 nocheck Add menu command:   "Objects",  "Open", "Read HTK Master Label File...", "", 0, "scripts/read_mlf.praat"
