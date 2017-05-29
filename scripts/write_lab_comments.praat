@@ -41,13 +41,13 @@ include ../../plugin_printf/procedures/printf.proc
 #! generated label files will have start and end times.
 #!
 form Save as HTK label file...
-    sentence Path_to_label
+#    sentence Path_to_label
     sentence Save_as
     comment  Leave paths empty for GUI selector
 endform
 
-@checkFilename: path_to_label$, "Select HTK label file..."
-path_to_label$ = checkFilename.name$
+#@checkFilename: path_to_label$, "Select HTK label file..."
+#path_to_label$ = checkFilename.name$
 
 @checkWriteFile: save_as$, "Save as HTK label file...", selected$("TextGrid") + ".lab"
 output_file$ = checkWriteFile.name$
@@ -57,6 +57,8 @@ total_textgrids = numberOfSelected("TextGrid")
 for t to total_textgrids
     textgrid[t] = selected("TextGrid", t)
 endfor
+
+object_name= selected("TextGrid")
 
 # Generate output tables
 for hypothesis to total_textgrids
@@ -181,11 +183,13 @@ removeObject: fields
 
 writeFile: output_file$, ""                        ; start from an empty .txt
 
-stringID = Read Strings from raw text file: path_to_label$
-numberOfStrings = Get number of strings
+string_object = object_name-2
+
+#stringID = Read Strings from raw text file: path_to_label$
+#numberOfStrings = Get number of strings
 
 for stringNumber from 1 to 2
-    selectObject: stringID
+    selectObject: string_object
     line$ = Get string: stringNumber
     appendFileLine: output_file$, line$
 endfor
@@ -224,7 +228,7 @@ for h to hypotheses
       removeObject: hypothesis
 endfor
 removeObject: widths
-removeObject: stringID
+removeObject: string_object
 
 # Restore original selection
 selectObject()

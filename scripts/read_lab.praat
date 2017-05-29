@@ -32,6 +32,25 @@ endform
 path_to_label$ = checkFilename.name$
 strings = Read Strings from raw text file: path_to_label$
 
+
+##########################################
+############# WORKING SPACE ##############
+#import the strings from the original lab file.
+
+#writeFile: output_file$, ""                        ; start from an empty .txt
+
+stringID = strings
+numberOfStrings = Get number of strings
+
+for stringNumber from 1 to 2
+    selectObject: stringID
+    line$ = Get string: stringNumber
+#    appendFileLine: output_file$, line$
+endfor
+
+############# WORKING SPACE ##############
+##########################################
+
 if use_sound_file
     @checkFilename: path_to_audio$, "Select sound file..."
     path_to_audio$ = checkFilename.name$
@@ -41,7 +60,7 @@ if use_sound_file
 endif
 
 @read_lab()
-removeObject: strings
+#removeObject: strings
 
 if discard_context
     nocheck minusObject: sound
