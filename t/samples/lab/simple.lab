@@ -1,0 +1,6 @@
+// This is an example
+// of a .lab file
+010173750 010648125 rd
+010648125 012147501 eh
+// another comment?
+012147501 012839375 gg
