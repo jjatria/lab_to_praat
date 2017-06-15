@@ -71,11 +71,11 @@ for hypothesis to total_textgrids
     for i to total_intervals
         tier = lowest_tier
 
-        this = Get start time of interval: tier, i
+        this = Get starting point: tier, i
         if i == total_intervals
             next = Get total duration
         else
-            next = Get start time of interval: tier, i+1
+            next = Get starting point: tier, i+1
         endif
 
         repeat
