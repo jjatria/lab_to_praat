@@ -1,24 +1,3 @@
-<<<<<<< Updated upstream
-
-This is the README for the htklabel CPrAN plugin for Praat.
-The latest version is available through CPrAN or at
-<http://cpran.net/plugins/htklabel>
-
-The htklabel plugin is free software: you can redistribute it
-and/or modify it under the terms of the GNU General Public
-License as published by the Free Software Foundation, either
-version 3 of the License, or (at your option) any later version.
-
-The htklabel plugin is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty
-of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with htklabel. If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2017 Christopher Shulby, Jose Joaquin Atria
-
 # plugin_htklabel
 
 A plugin for Praat to read information from a HTK / HTS label file and
@@ -32,24 +11,9 @@ plugin by typing
 
     cpran install htklabel
 
-=======
-# plugin_htklabel
-
-A plugin for Praat to read information from a HTK / HTS label file and
-Master Label Files.
-
-## Installation:
-
-This plugin requires some of the existing plugins distributed through CPrAN.
-If you have the CPrAN client installed on your machine, you can install this
-plugin by typing
-
-    cpran install htklabel
-
->>>>>>> Stashed changes
 > NOTE: this will not work until registration on CPrAN is complete, which
-> should be soon.
-> if this does not work you may clone this repo to your PRAAT preferences directory.
+> should be soon. If this does not work you may clone this repo to your Praat
+> preferences directory.
 
 After that, you should be able to read `.lab` and `.mlf` files using the
 commands in the `Open` menu, and save TextGrid objects as labels using the
