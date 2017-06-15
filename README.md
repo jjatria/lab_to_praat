@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 
 This is the README for the htklabel CPrAN plugin for Praat.
 The latest version is available through CPrAN or at
@@ -31,6 +32,21 @@ plugin by typing
 
     cpran install htklabel
 
+=======
+# plugin_htklabel
+
+A plugin for Praat to read information from a HTK / HTS label file and
+Master Label Files.
+
+## Installation:
+
+This plugin requires some of the existing plugins distributed through CPrAN.
+If you have the CPrAN client installed on your machine, you can install this
+plugin by typing
+
+    cpran install htklabel
+
+>>>>>>> Stashed changes
 > NOTE: this will not work until registration on CPrAN is complete, which
 > should be soon.
 > if this does not work you may clone this repo to your PRAAT preferences directory.
@@ -39,7 +55,7 @@ After that, you should be able to read `.lab` and `.mlf` files using the
 commands in the `Open` menu, and save TextGrid objects as labels using the
 commands in the `Save` menu.
 
-If **you do no not have the client** you can follow [these instructions][1] 
+If **you do no not have the client** you can follow [these instructions][1]
 to set it up and install the plugin as above.
 
 If **you cannot install the client**, you can still use this plugin, as long
@@ -57,25 +73,44 @@ The full list of dependencies (pointing to their git repositories) is
 
 ## Plugin Use
 
-From the object window the user may open...
+### Reading files
 
-1. ".lab" file by selecting Open > Read HTK Label File... ;
-2. ".mlf" file by selecting Open > Read HTK Master Label File... ;
+This plugin provides features to import HTK/HTS label files into Praat. Mainly,
+this is done through two commands, both available under the `Open` menu in the
+Objects window.
 
-When one of these tabs is selected a menu will appear prompting the user to include the path to the .lab or .mlf file desired.
+The command `Read HTK Label File...` takes the path to a single label file and
+will read that into one or more TextGrid objects. The mapping between these two
+is done so that levels are mapped to tiers and alternatives are mapped to
+separate TextGrid objects. After the command, all newly created objects will be
+selected.
 
-Optionally, the user may also include a corresponding audio file which has been aligned with the labels.
-	-it is important to note that if the user chooses to include an audio file, it is also necessay to check the box below "Use sound file", otherwise teh audio will not load.
+Currently, only labels that provide both a start and an end position are
+supported.
 
-By default, the box "Discard context" is also left unchecked. This will load the entire phonological context in the label file.
-If the user wishes to diplay only the central phoneme, it is necessay to check this box as well.
+Master Label Files can be read with the `Read HTK Master Label File...`, which
+works differently. Since MLF files specify a mapping between filename patterns
+and files, reading one into Praat will result in a Table object with the
+information necessary for that mapping. Queries are then performed _on_ this
+object with the `Query path from MLF Table...` command available in the
+contextual menu.
 
-To Save a file...
+Patterns in MLF files typically use fileglobs, but since in Praat it is more
+typical to use regular expressions for this purpose, this command supports both.
 
-The user may click on Save > Save as HTK Label File with comments... (if you want to save the original comments at the top of your lab file),  Save > Save as HTK Label File without comments... (this is what most people will likely use) or Save > Save as HTK Master Label File... (if you are saving an .mlf).
+The query command takes a filename pattern to match, and a value specifying
+how the pattern should be interpreted: either `"Regex"` or `"Glob"`.
 
-## Selective Revision
+If supported, the matched file will then be read into Praat, and any newly
+created objects will be selected. Please note that this mapping can point to
+_any_ file, not only those used by HTK / HTS.
 
-The user may wish top open a View & Edit Window to a specific interval to revise specific boundries manually.  In the case it is necessary to call praat from the command line using the following command:
+## Writing files
 
-HTS_SOUND_FILE="<PATH TO SOUND FILE>" HTS_TEXTGRID_FILE="<PATH TO LABEL FILE>" START_TIME="<BEGINNING OF INTERVAL>" END_TIME="<END OF INTERVAL>" praat
+TextGrid objects can be written to HTK / HTS labels using the
+`Save as HTK Label file...`. At this point, converting MLF Table objects to MLF
+files is not supported.
+
+Note that information that only information that can be stored in the selected
+TextGrid objects will be saved into the label file. This will _not_ include any
+coments that may have been there originally.
