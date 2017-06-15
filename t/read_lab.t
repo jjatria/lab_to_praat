@@ -2,70 +2,45 @@ include ../../plugin_tap/procedures/more.proc
 
 @no_plan()
 
-reference = Read from file: "samples/lab/simple.TextGrid"
-
 runScript: "../scripts/read_lab.praat", "../t/samples/lab/simple.lab"
-@cmp_ok: numberOfSelected("TextGrid"), ">", 0, "Script generates TextGrid"
+@is: numberOfSelected("TextGrid"), 1, "Simple label reas as single TextGrid"
 
-hypotheses = numberOfSelected("TextGrid")
-for i to hypotheses
-    hyp[i] = selected("TextGrid", i)
+@is: do("Get total duration"),            1.5, "Duration matches"
+@is: do("Get number of tiers"),           1,   "Tiers match"
+@is: do("Get number of intervals...", 1), 3,   "Intervals match"
+
+labels$ = " "
+for i to do("Get number of intervals...", 1)
+  labels$ = labels$ + do$("Get label of interval...", 1, i) + " "
 endfor
-for i to hypotheses
-    textgrid = hyp[i]
-    selectObject: reference, textgrid
-    @test_intervals()
+@is$: labels$, " a b c ", "Labels match"
+
+Remove
+
+runScript: "../scripts/read_lab.praat", "../t/samples/lab/levels.lab"
+@is: numberOfSelected("TextGrid"), 1, "Multiple levels reas as single TextGrid"
+
+@is: do("Get total duration"),            0.82, "Duration matches"
+@is: do("Get number of tiers"),           2,   "Levels read as different tiers"
+
+Remove
+
+runScript: "../scripts/read_lab.praat", "../t/samples/lab/alternatives.lab"
+n = numberOfSelected("TextGrid")
+@is: n, 3, "Alternatives reas as different TextGrid objects"
+
+for i to n
+  tg[i] = selected("TextGrid", i)
 endfor
-for i to hypotheses
-    removeObject: hyp[i]
+for i to n
+  selectObject: tg[i]
+  @is: do("Get total duration"),            0.82, "Duration matches"
+  @is: do("Get number of tiers"),           1,    "Tiers match"
+  @is: do("Get number of intervals...", 1), 2,    "Intervals match"
 endfor
-
-procedure test_intervals ()
-    .ref  = selected("TextGrid", 1)
-    .test = selected("TextGrid", 2)
-
-    selectObject: .ref
-    .ref_tiers = Get number of tiers
-    selectObject: .test
-    .test_tiers = Get number of tiers
-    @is: .ref_tiers, .test_tiers, "Same number of tiers"
-
-    if ok.value
-        for .tier to .test_tiers
-            selectObject: .test
-            @is_true: do("Is interval tier...", .tier), "Tier '.tier' is interval tier"
-
-            selectObject: .test
-            .test_intervals = Get number of intervals: .tier
-
-            @diag: "Testing '.test_intervals' intervals"
-            for .i to .test_intervals
-                selectObject: .test
-                .interval = .i
-                .test_label$ = Get label of interval: .tier, .interval
-                .test_start  = Get starting point:    .tier, .interval
-                .test_end    = Get end point:         .tier, .interval
-                .mid         = .test_start + (.test_end - .test_start) / 2
-
-                selectObject: .ref
-                .interval = Get interval at time: .tier, .mid
-                if .interval
-                    .ref_label$ = Get label of interval: .tier, .interval
-                    .ref_start  = Get starting point:    .tier, .interval
-                    .ref_end    = Get end point:         .tier, .interval
-
-                    @is$: .test_label$, .ref_label$, "Interval label " + string$(.interval)
-                    @is:  .test_start,  .ref_start,  "Interval start " + string$(.interval)
-                    @is:  .test_end,    .ref_end,    "Interval end "   + string$(.interval)
-                else
-                    @diag: "No equivalent interval in reference data!"
-                endif
-            endfor
-        endfor
-    endif
-endproc
-
-removeObject: reference
+for i to n
+  removeObject: tg[i]
+endfor
 
 @ok_selection()
 
