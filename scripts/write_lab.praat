@@ -18,8 +18,8 @@
 # Copyright 2017 Christopher Shulby, Jose Joaquin Atria
 
 include ../../plugin_utils/procedures/check_filename.proc
-include ../../plugin_htklabel/procedures/read.proc
 include ../../plugin_printf/procedures/printf.proc
+include ../../plugin_htklabel/procedures/timestamps.proc
 
 #! ~~~ params
 #! in:
