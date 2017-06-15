@@ -41,9 +41,16 @@ include ../../plugin_printf/procedures/printf.proc
 #! generated label files will have start and end times.
 #!
 form Save as HTK label file...
+#    sentence Path_to_label
     sentence Save_as
     comment  Leave paths empty for GUI selector
 endform
+
+#@checkFilename: path_to_label$, "Select HTK label file..."
+#path_to_label$ = checkFilename.name$
+
+@checkWriteFile: save_as$, "Save as HTK label file...", selected$("TextGrid") + ".lab"
+output_file$ = checkWriteFile.name$
 
 total_textgrids = numberOfSelected("TextGrid")
 
@@ -51,8 +58,7 @@ for t to total_textgrids
     textgrid[t] = selected("TextGrid", t)
 endfor
 
-@checkWriteFile: save_as$, "Save as HTK label file...", selected$("TextGrid") + ".lab"
-output_file$ = checkWriteFile.name$
+object_name= selected("TextGrid")
 
 # Generate output tables
 for hypothesis to total_textgrids
@@ -71,11 +77,11 @@ for hypothesis to total_textgrids
     for i to total_intervals
         tier = lowest_tier
 
-        this = Get starting point: tier, i
+        this = Get start time of interval: tier, i
         if i == total_intervals
             next = Get total duration
         else
-            next = Get starting point: tier, i+1
+            next = Get start time of interval: tier, i+1
         endif
 
         repeat
@@ -173,8 +179,22 @@ for c to Object_'fields'.ncol
 endfor
 removeObject: fields
 
+#import the strings from the original lab file.
+
+writeFile: output_file$, ""                        ; start from an empty .txt
+
+string_object = object_name-2
+
+#stringID = Read Strings from raw text file: path_to_label$
+#numberOfStrings = Get number of strings
+
+for stringNumber from 1 to 2
+    selectObject: string_object
+    line$ = Get string: stringNumber
+    appendFileLine: output_file$, line$
+endfor
+
 # Write the output tables to the output file
-writeFile: output_file$, ""
 for h to hypotheses
      hypothesis = hypothesis[h]
 
@@ -208,6 +228,7 @@ for h to hypotheses
       removeObject: hypothesis
 endfor
 removeObject: widths
+removeObject: string_object
 
 # Restore original selection
 selectObject()

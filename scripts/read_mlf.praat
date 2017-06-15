@@ -134,7 +134,7 @@ selectObject: mlf
 procedure abort: .reason$
   nocheck removeObject: lines
   nocheck removeObject: mlf
-  exitScript: "Input file """'filename$'""" is not a valid MLF file: ",
+  exitScript: "Input file """, filename$, """ is not a valid MLF file: ",
     ... .reason$
 endproc
 

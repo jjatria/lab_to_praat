@@ -25,9 +25,42 @@ form Read HTK label file...
     comment  Leave paths empty for GUI selectors
 endform
 
-@checkFilename: filename$, "Select HTK label file..."
-filename$ = checkFilename.name$
-strings = Read Strings from raw text file: filename$
+@checkFilename: path_to_label$, "Select HTK label file..."
+path_to_label$ = checkFilename.name$
+strings = Read Strings from raw text file: path_to_label$
+
+
+##########################################
+############# WORKING SPACE ##############
+#import the strings from the original lab file.
+
+#writeFile: output_file$, ""                        ; start from an empty .txt
+
+stringID = strings
+numberOfStrings = Get number of strings
+
+for stringNumber from 1 to 2
+    selectObject: stringID
+    line$ = Get string: stringNumber
+#    appendFileLine: output_file$, line$
+endfor
+
+############# WORKING SPACE ##############
+##########################################
+
+if use_sound_file
+    @checkFilename: path_to_audio$, "Select sound file..."
+    path_to_audio$ = checkFilename.name$
+    sound = Read from file: path_to_audio$
+
+    plusObject: strings
+endif
 
 @read_lab()
-removeObject: strings
+#removeObject: strings
+
+if discard_context
+    nocheck minusObject: sound
+    Replace interval text: 1, 0, 0, "^.*?-([^+]*?)\+.*", "\1", "Regular Expressions"
+    nocheck plusObject: sound
+endif
