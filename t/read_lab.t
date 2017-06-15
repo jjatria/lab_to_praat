@@ -2,14 +2,10 @@ include ../../plugin_tap/procedures/more.proc
 
 @no_plan()
 
-reference_sound = Read from file: "sample.wav"
-reference_duration = Get total duration
+reference = Read from file: "samples/lab/simple.TextGrid"
 
-reference_textgrid = Read from file: "context.TextGrid"
-
-runScript: "../scripts/read_lab.praat", "../t/sample.lab", "", 0, 0
-@is_true:  numberOfSelected("TextGrid"), "Script generates TextGrid without Sound"
-@is_false: numberOfSelected("Sound"),    "Script does not read Sound"
+runScript: "../scripts/read_lab.praat", "../t/samples/lab/simple.lab"
+@cmp_ok: numberOfSelected("TextGrid"), ">", 0, "Script generates TextGrid"
 
 hypotheses = numberOfSelected("TextGrid")
 for i to hypotheses
