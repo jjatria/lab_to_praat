@@ -18,8 +18,8 @@
 # Copyright 2017 Christopher Shulby, Jose Joaquin Atria
 
 include ../../plugin_utils/procedures/check_filename.proc
-include ../../plugin_htklabel/procedures/read.proc
 include ../../plugin_printf/procedures/printf.proc
+include ../../plugin_htklabel/procedures/timestamps.proc
 
 #! ~~~ params
 #! in:
@@ -71,11 +71,11 @@ for hypothesis to total_textgrids
     for i to total_intervals
         tier = lowest_tier
 
-        this = Get start time of interval: tier, i
+        this = Get starting point: tier, i
         if i == total_intervals
             next = Get total duration
         else
-            next = Get start time of interval: tier, i+1
+            next = Get starting point: tier, i+1
         endif
 
         repeat

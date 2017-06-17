@@ -17,17 +17,33 @@
 #
 # Copyright 2017 Christopher Shulby, Jose Joaquin Atria
 
-include ../procedures/read.proc
-include ../../plugin_utils/procedures/check_filename.proc
+#! ~~~ params
+#! in:
+#!   .mlf: Timestamp from the HTK label
+#! out:
+#!   .return: The equivalent time in seconds
+#! ~~~
+#!
+#! Convert a HTK/HTS label file timestamp to seconds.
+#!
+procedure mlf_time_to_seconds: .mlf
+    .return = .mlf / 1e7
+endproc
 
-form Read HTK label file...
-    sentence Filename
-    comment  Leave paths empty for GUI selectors
-endform
-
-@checkFilename: filename$, "Select HTK label file..."
-filename$ = checkFilename.name$
-strings = Read Strings from raw text file: filename$
-
-@read_lab()
-removeObject: strings
+#! ~~~ params
+#! in:
+#!   .time: A time in seconds
+#! out:
+#!   .return$: The equivalent time in HTk/HTS label timestamp format
+#! ~~~
+#!
+#! Convert a time in seconds to a timestamp suitable to be used in a HTK/HTS
+#! label file. The final timestamp is returned as a string zero-padded to a
+#! length of 9 characters.
+#!
+procedure seconds_to_mlf_time: .time
+    .return$ = string$(.time * 1e7 div 1)
+    while length(.return$) < 9
+        .return$ = "0" + .return$
+    endwhile
+endproc
