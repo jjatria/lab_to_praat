@@ -8,6 +8,7 @@ env:
 
 install:
   - yes | perlbrew install-cpanm
+  - cpanm App::cpanminus
   - cpanm https://gitlab.com/cpran/CPrAN.git
   - cpran init
   - cpran update
