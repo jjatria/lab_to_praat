@@ -75,6 +75,6 @@ TextGrid objects can be written to HTK / HTS labels using the
 `Save as HTK Label file...`. At this point, converting MLF Table objects to MLF
 files is not supported.
 
-Note that information that only information that can be stored in the selected
-TextGrid objects will be saved into the label file. This will _not_ include any
-coments that may have been there originally.
+Note that only information that can be stored in the selected TextGrid objects
+will be saved into the label file. This will _not_ include any coments that may
+have been there originally.
