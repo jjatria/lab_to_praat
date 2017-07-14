@@ -21,6 +21,9 @@ include ../../plugin_utils/procedures/check_filename.proc
 include ../../plugin_printf/procedures/printf.proc
 include ../../plugin_htklabel/procedures/timestamps.proc
 
+# Disable printf falback mode, for faster output
+printf.stdout = 1
+
 #! ~~~ params
 #! in:
 #!   Save as: (sentence) The path of the file to write
