@@ -23,6 +23,7 @@ include ../../plugin_htklabel/procedures/timestamps.proc
 
 # Disable printf falback mode, for faster output
 printf.stdout = 1
+printf.system = 0
 
 #! ~~~ params
 #! in:
