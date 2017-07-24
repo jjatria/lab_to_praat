@@ -1,4 +1,7 @@
 - next: # unreleased
+  - Fix:
+    - Made considerable improvements in performance, particularly on Windows,
+      by disabling some fallbacks in the printf calls made while writing labels
 - v0.0.1:
   - First working version
 
